@@ -1,0 +1,129 @@
+*vim-goto-file-sh.txt*	|includeexpr| for |gf|.	2024 Dec 04
+
+VIM GOTO FILE — SH: Enable 'gf' to resolve shell variable paths.~
+
+VIM GOTO FILE — SH			*vim_goto_file_sh*
+
+1. About This Plugin			|vim_goto_file_sh_about|
+2. Further Details			|vim_goto_file_sh_further_details|
+3. Setup                                |vim_goto_file_sh_setup|
+4. Configuration			|vim_goto_file_sh_configuration|
+5. Caveats				|vim_goto_file_sh_caveats|
+6. Reference				|vim_goto_file_sh_reference|
+7. Related projects			|vim_goto_file_sh_related_projects|
+
+==============================================================================
+1. About This Plugin			*vim_goto_file_sh_about*
+
+This plugin enables the Vim |gf| command to resolve shell variable
+paths, including those with alternative values.
+
+For example, you could position the cursor over the following path
+and press |gf|: >
+
+  ${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start/vim-goto-file-sh/README.rst
+<
+and Vim would open the file at >
+
+  ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+<
+Project page: https://github.com/embrace-vim/vim-goto-file-sh
+
+==============================================================================
+2. Further Details			*vim_goto_file_sh_further_details*
+
+The Vim |gf| command ("Edit the file whose name is under or after the cursor")
+will resolve tilde and the HOME environ variable, but not other variables.
+
+- E.g., |gf| works on these paths: >
+
+  ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+    
+  "$HOME/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst"
+
+  "${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst"
+<
+- But Vim's built-in |gf| won't work on these paths: >
+
+  "${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start/vim-goto-file-sh/README.rst"
+
+  "${EMBRACE_VIM:-${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start}/vim-goto-file-sh/README.rst"
+<
+Fortunately, Vim provides the |includeexpr| hook for when |gf| comes
+up empty — so we don't need to rewrite the |gf| function, we can just
+add an |includeexpr| function.
+
+==============================================================================
+3. Setup				*vim_goto_file_sh_setup*
+
+First, install this plugin (see the project `README.rst`).
+
+Next, ensure that |isfname| is configured properly.
+
+- To work on alternative shell variable values, e.g., if you want
+  |gf| to resolve `${foo:-bar}` to `bar` if `$foo` is not defined in the
+  environment, then you'll need to ensure that Vim includes colons
+  when sussing filenames.
+
+  - E.g., here's the author's |isfname| value (where 39 is the
+    single quote character, and 48-57 are the characters '0'-'9'): >
+
+  set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39
+<
+==============================================================================
+4. Configuration			*vim_goto_file_sh_configuration*
+
+By default, this plugin will only change |includeexpr| for specific
+file types (and it will not alert you if it clobbers an existing
+|includeexpr|).
+
+- Specifically, this plugin works on Bash and Shell file types,
+  as well as reST, Markdown, and Text.
+
+- You can use a global variable to add or remove file types.
+
+  Here's the default value: >
+
+  let g:vim_goto_file_filetypes = 'bash,sh,markdown,rst,txt'
+<
+- If you'd like a global |includeexpr| (e.g., `set includeexpr = ...`
+  and not `set local includeexpr = ...`), you can set this value to
+  the empty string, e.g.: >
+
+  let g:vim_goto_file_filetypes = ''
+<
+==============================================================================
+5. Caveats				*vim_goto_file_sh_caveats*
+
+This plugin calls `eval('$<var>')` on the environment variables
+to try to resolves matches. So it matters how you started Vim.
+
+- If you've started Vim/gVim from a shell terminal, it'll resolve
+  environments normally defined in your shell.
+
+- But if you've started Vim/gVim some other way, e.g., if you started
+  MacVim via Spotlight Search, then your Vim environment won't include
+  the same environment variables that your shell normally has.
+
+  - Just FYI, you might want to start Vim/gVim from your shell to
+    get this most utility out of this plugin.
+
+==============================================================================
+6. Reference				*vim_goto_file_sh_reference*
+
+See Vim online help for details about |gf| and |includeexpr|: >
+
+  :h gf
+
+  :h includeexpr
+<
+==============================================================================
+7. Related projects			*vim_goto_file_sh_related_projects*
+
+See also these similar project(s) (use `gW` to open them in your browser):
+
+- "Sensible 'gf' for Node Path Relative JS module resolution per project 🐿"
+
+  https://github.com/tomarrell/vim-npr#🐿
+
+ vim:tw=78:ts=8:ft=help:norl:
