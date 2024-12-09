@@ -187,8 +187,6 @@ Then whenever you want to reference the help from Vim, run:
 .. |ohmyrepos| replace:: ``ohmyrepos``
 .. _ohmyrepos: https://github.com/landonb/ohmyrepos
 
-|vim-plug|_ is an interactive, terminal-based time tracking application.
-
 Note that you'll need to update the repo manually (e.g., ``git pull``
 occasionally).
 
