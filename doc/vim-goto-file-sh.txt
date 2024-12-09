@@ -2,18 +2,18 @@
 
 VIM GOTO FILE — SH: Enable 'gf' to resolve shell variable paths.~
 
-VIM GOTO FILE — SH			*vim_goto_file_sh*
+VIM GOTO FILE — SH			*vim-goto-file-sh*
 
-1. About This Plugin			|vim_goto_file_sh_about|
-2. Further Details			|vim_goto_file_sh_further_details|
-3. Setup                                |vim_goto_file_sh_setup|
-4. Configuration			|vim_goto_file_sh_configuration|
-5. Caveats				|vim_goto_file_sh_caveats|
-6. Reference				|vim_goto_file_sh_reference|
-7. Related projects			|vim_goto_file_sh_related_projects|
+1. About This Plugin			|vim-goto-file-sh-about|
+2. Further Details			|vim-goto-file-sh-details|
+3. Setup				|vim-goto-file-sh-setup|
+4. Configuration			|vim-goto-file-sh-configuration|
+5. Caveats				|vim-goto-file-sh-caveats|
+6. Reference				|vim-goto-file-sh-reference|
+7. Related projects			|vim-goto-file-sh-related|
 
 ==============================================================================
-1. About This Plugin			*vim_goto_file_sh_about*
+1. About This Plugin			*vim-goto-file-sh-about*
 
 This plugin enables the Vim |gf| command to resolve shell variable
 paths, including those with alternative values.
@@ -30,7 +30,7 @@ and Vim would open the file at >
 Project page: https://github.com/embrace-vim/vim-goto-file-sh
 
 ==============================================================================
-2. Further Details			*vim_goto_file_sh_further_details*
+2. Further Details			*vim-goto-file-sh-details*
 
 The Vim |gf| command ("Edit the file whose name is under or after the cursor")
 will resolve tilde and the HOME environ variable, but not other variables.
@@ -54,7 +54,7 @@ up empty — so we don't need to rewrite the |gf| function, we can just
 add an |includeexpr| function.
 
 ==============================================================================
-3. Setup				*vim_goto_file_sh_setup*
+3. Setup				*vim-goto-file-sh-setup*
 
 First, install this plugin (see the project `README.rst`).
 
@@ -71,7 +71,7 @@ Next, ensure that |isfname| is configured properly.
   set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39
 <
 ==============================================================================
-4. Configuration			*vim_goto_file_sh_configuration*
+4. Configuration			*vim-goto-file-sh-configuration*
 
 By default, this plugin will only change |includeexpr| for specific
 file types (and it will not alert you if it clobbers an existing
@@ -93,7 +93,7 @@ file types (and it will not alert you if it clobbers an existing
   let g:vim_goto_file_filetypes = ''
 <
 ==============================================================================
-5. Caveats				*vim_goto_file_sh_caveats*
+5. Caveats				*vim-goto-file-sh-caveats*
 
 This plugin calls `eval('$<var>')` on the environment variables
 to try to resolves matches. So it matters how you started Vim.
@@ -109,7 +109,7 @@ to try to resolves matches. So it matters how you started Vim.
     get this most utility out of this plugin.
 
 ==============================================================================
-6. Reference				*vim_goto_file_sh_reference*
+6. Reference				*vim-goto-file-sh-reference*
 
 See Vim online help for details about |gf| and |includeexpr|: >
 
@@ -118,7 +118,7 @@ See Vim online help for details about |gf| and |includeexpr|: >
   :h includeexpr
 <
 ==============================================================================
-7. Related projects			*vim_goto_file_sh_related_projects*
+7. Related projects			*vim-goto-file-sh-related*
 
 See also these similar project(s) (use `gW` to open them in your browser):
 
