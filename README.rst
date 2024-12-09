@@ -161,19 +161,19 @@ If you installed to the optional path, tell Vim to load the package:
 
 .. code-block:: vim
 
-   :packadd! vim-goto-file-sh
+    :packadd! vim-goto-file-sh
 
 Just once, tell Vim to build the online help:
 
 .. code-block:: vim
 
-   :Helptags
+    :Helptags
 
 Then whenever you want to reference the help from Vim, run:
 
 .. code-block:: vim
 
-   :help vim_goto_file_sh
+    :help vim_goto_file_sh
 
 .. |vim-plug| replace:: ``vim-plug``
 .. _vim-plug: https://github.com/junegunn/vim-plug
@@ -211,7 +211,7 @@ occasionally).
 
 .. code-block:: vim
 
-      :PlugUpdate
+    :PlugUpdate
 
 - Similarly, there's also |Vundle|_.
 
