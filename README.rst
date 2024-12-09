@@ -190,11 +190,11 @@ Then whenever you want to reference the help from Vim, run:
 Note that you'll need to update the repo manually (e.g., ``git pull``
 occasionally).
 
-- If you'd like to be able to update from within Vim, checkout
+- If you'd like to be able to update from within Vim, you could use
   |vim-plug|_.
 
   - You could then skip the steps above and register
-    this plugin like this, e.g.:
+    the plugin like this, e.g.:
 
 .. code-block:: vim
 
@@ -244,8 +244,8 @@ occasionally).
     :PluginInstall!
     :PluginUpdate
 
-- Or, if you're like the author, you use a multi-repo Git tool,
-  such as |myrepos|_ (or the author's fork, |ohmyrepos|_).
+- Or, if you're like the author, you could use a multi-repo Git tool,
+  such as |myrepos|_ (along with the author's library, |ohmyrepos|_).
 
   - With |myrepos|_, you could update all your Git repos with
     the following command:
@@ -254,16 +254,14 @@ occasionally).
 
     mr -d / pull
 
-- Alternatively, if you created a repo grouping using
-  |ohmyrepos|_, you could pull just Vim plugin changes
-  with something like this:
+- Alternatively, if you use |ohmyrepos|_, you could pull
+  just Vim plugin changes with something like this:
 
 .. code-block::
 
     MR_INCLUDE=vim-plugins mr -d / pull
 
-- Given that you identified your vim-plugins using the
-  'skip' action, e.g.:
+- After you identify your vim-plugins using the 'skip' action, e.g.:
 
 .. code-block::
 
