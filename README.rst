@@ -107,6 +107,48 @@ to try to resolves matches. So it matters how you started Vim.
   - Just FYI, you might want to start Vim/gVim from your shell to
     get this most utility out of this plugin.
 
+Optional ``gf`` insert and visual mode maps
+===========================================
+
+.. |vim-async-mapper| replace:: ``vim-async-mapper``
+.. _vim-async-mapper: https://github.com/embrace-vim/vim-async-mapper
+
+``gf`` insert mode map
+----------------------
+
+If you'd like a nondisruptive ``gf`` binding to work from insert
+mode, you can install |vim-async-mapper|_:
+
+  https://github.com/embrace-vim/vim-async-mapper#જ⁀➴
+
+If that plugin is installed, you can use ``gf`` from insert mode
+to open file paths (and it won't interrupt your normal ``g``
+keypresses — i.e., you won't see a pause after typing ``g``
+like you would with a naïve ``imap gf`` binding).
+
+- You can opt out of the insert mode ``gf`` map by uninstalling
+  |vim-async-mapper|_, or by adding the following to your Vim config:
+
+.. code-block:: vim
+
+  " Inhibit insert mode `gf` map
+  let g:vim_goto_file_add_insert_mode_map = 0
+
+``gf`` visual mode map
+----------------------
+
+``vim-goto-file-sh`` will also create a visual mode ``gf`` map, so
+that you can select text and then type ``gf`` to open the selected
+path.
+
+- You can opt out of the visual mode ``gf`` map by adding the
+  following to your Vim config:
+
+.. code-block:: vim
+
+  " Inhibit visual mode `gf` map
+  let g:vim_goto_file_add_visual_mode_map = 0
+
 Reference
 =========
 
