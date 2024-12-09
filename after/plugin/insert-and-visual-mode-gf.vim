@@ -1,5 +1,5 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
-" Author: Landon Bouma <https://tallybark.com/> 
+" Author: Landon Bouma <https://tallybark.com/>
 " Project: https://github.com/embrace-vim/vim-goto-file-sh#🚕
 " Summary: Shell syntax-aware `includeexpr` for `gf`
 " License: GPLv3
@@ -40,7 +40,7 @@ let g:loaded_vim_goto_file_after_plugin_includeexpr_for_gf = 1
 
 " This works, but the interaction is not elegant, because Vim pauses
 " briefly after you type 'g':
-" 
+"
 "   inoremap gf <C-O>gf
 "
 " So we'll use a fancy plugin that beautifies insert mode map UX.
