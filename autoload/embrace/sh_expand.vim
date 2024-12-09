@@ -21,13 +21,13 @@
 "        https://github.com/landonb/vim-source-reloader#↩️
 " - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
 "
-" silent! unlet g:loaded_vim_goto_file_autoload_sh_expand
+" silent! unlet g:loaded_vim_goto_file_sh_autoload_sh_expand
 
-if exists("g:loaded_vim_goto_file_autoload_sh_expand") || &cp
+if exists("g:loaded_vim_goto_file_sh_autoload_sh_expand") || &cp
   finish
 endif
 
-let g:loaded_vim_goto_file_autoload_sh_expand = 1
+let g:loaded_vim_goto_file_sh_autoload_sh_expand = 1
 
 " -------------------------------------------------------------------
 
