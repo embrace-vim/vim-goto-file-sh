@@ -285,7 +285,7 @@ Attribution
 .. _@landonb: https://github.com/landonb
 
 The |embrace-vim|_ logo by |@landonb|_ contains
-`embrace by Olena Panasovska from Noun Project
-<https://thenounproject.com/icon/embrace-3819610/>`__
+`coffee cup with straw by farra nugraha from Noun Project
+<https://thenounproject.com/icon/coffee-cup-with-straw-6961731/>`__
 (CC BY 3.0).
 
