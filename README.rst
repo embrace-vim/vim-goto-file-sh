@@ -215,7 +215,7 @@ Then whenever you want to reference the help from Vim, run:
 
 .. code-block:: vim
 
-    :help vim_goto_file_sh
+    :help vim-goto-file-sh
 
 .. |vim-plug| replace:: ``vim-plug``
 .. _vim-plug: https://github.com/junegunn/vim-plug
