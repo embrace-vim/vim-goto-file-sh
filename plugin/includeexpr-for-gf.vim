@@ -21,7 +21,7 @@
 "        https://github.com/landonb/vim-source-reloader#↩️
 " - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
 "
- silent! unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
+" silent! unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
 
 if exists("g:loaded_vim_goto_file_plugin_includeexpr_for_gf") || &cp
   finish
