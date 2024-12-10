@@ -58,8 +58,7 @@ let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 " USAGE: Enable (opt-in) insert mode `gf` with global:
 "   let g:vim_goto_file_add_insert_mode_map = 1
 function! s:setup_bindings_insert_mode_gf() abort
-  if !exists("g:vim_goto_file_add_insert_mode_map")
-      \ || !g:vim_goto_file_add_insert_mode_map
+  if !s:is_flag_enabled("g:vim_goto_file_add_insert_mode_map")
 
     return
   endif
@@ -85,14 +84,24 @@ endfunction
 " USAGE: Enable (opt-in) visual mode `gf` with global:
 "   let g:vim_goto_file_add_visual_mode_map = 1
 function! s:setup_bindings_visual_mode_gf() abort
-  if !exists("g:vim_goto_file_add_visual_mode_map")
-      \ || !g:vim_goto_file_add_visual_mode_map
+  if !s:is_flag_enabled("g:vim_goto_file_add_visual_mode_map")
 
     return
   endif
 
   " [y]ank selected text to `"` register, then paste `"` contents as arg to :edit.
   vnoremap gf y:edit <C-r>"<CR>
+endfunction
+
+" -------------------------------------------------------------------
+
+function! s:is_flag_enabled(var_name) abort
+  if !exists(a:var_name) || !eval(a:var_name)
+
+    return 0
+  endif
+
+  return 1
 endfunction
 
 " ***
