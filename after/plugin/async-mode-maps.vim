@@ -104,5 +104,7 @@ function! s:setup_bindings_all_modes_gf()
   call s:setup_bindings_visual_mode_gf()
 endfunction
 
+" -------------------------------------------------------------------
+
 call s:setup_bindings_all_modes_gf()
 
