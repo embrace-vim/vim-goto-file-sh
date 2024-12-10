@@ -78,6 +78,8 @@ function! s:setup_bindings_insert_mode_gf()
   endtry
 endfunction
 
+" ***
+
 " Also wire visual mode `gf`.
 "
 " USAGE: Enable (opt-in) visual mode `gf` with global:
@@ -93,6 +95,8 @@ function! s:setup_bindings_visual_mode_gf()
   vnoremap gf y:edit <C-r>"<CR>
 endfunction
 
+" ***
+
 " Use `gF` command, or `gf` is user wants that instead.
 function! s:setup_gf_command()
   let s:gf_command = "gF"
@@ -103,6 +107,8 @@ function! s:setup_gf_command()
     let s:gf_command = "gf"
   endif
 endfunction
+
+" ***
 
 function! s:setup_bindings_all_modes_gf()
   call s:setup_gf_command()
