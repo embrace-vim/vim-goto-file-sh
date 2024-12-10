@@ -1,7 +1,7 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
 " Author: Landon Bouma <https://tallybark.com/>
 " Project: https://github.com/embrace-vim/vim-goto-file-sh#🚕
-" Summary: Shell syntax-aware `includeexpr` for `gf`
+" Summary: Async insert and visual mode maps for `gf`
 " License: GPLv3
 
 " -------------------------------------------------------------------
