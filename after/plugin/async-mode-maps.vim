@@ -22,7 +22,7 @@ let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 
 " Add async 2-character insert mode map so you can run `gf` from insert
 " mode (and use async plugin so it doesn't cause input to briefly pause,
-" which is how a normal, naïve `imap gf` would behave).
+" which is how a naïve `imap gf gf` would behave).
 "
 " - Note after typing `gf` in insert mode, what you typed will be
 "   undone, so it won't mark your buffer edited (unless you were
