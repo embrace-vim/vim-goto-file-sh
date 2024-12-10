@@ -120,6 +120,12 @@ endfunction
 " ***
 
 function! s:setup_bindings_all_modes_gf() abort
+  if !s:is_flag_enabled("g:vim_goto_file_add_insert_mode_map")
+    \ && !s:is_flag_enabled("g:vim_goto_file_add_visual_mode_map")
+
+    return
+  endif
+
   call s:setup_gf_command()
   call s:setup_bindings_insert_mode_gf()
   call s:setup_bindings_visual_mode_gf()
