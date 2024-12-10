@@ -6,17 +6,17 @@
 
 " -------------------------------------------------------------------
 
-" USAGE: After editing this plugin, you can reload it on the fly with
-"        https://github.com/landonb/vim-source-reloader#↩️
-" - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
+" USAGE: Unlet var (or nix finish) & press <F9> to reload this plugin.
+" USING: https://github.com/landonb/vim-source-reloader#↩️
 "
-" silent! unlet g:loaded_vim_goto_file_after_plugin_includeexpr_for_gf
+" silent! unlet g:loaded_vim_goto_file_after_plugin_async_mode_maps
 
-if exists("g:loaded_vim_goto_file_after_plugin_includeexpr_for_gf") || &cp
+if exists("g:loaded_vim_goto_file_after_plugin_async_mode_maps") || &cp
+
   finish
 endif
 
-let g:loaded_vim_goto_file_after_plugin_includeexpr_for_gf = 1
+let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 
 " -------------------------------------------------------------------
 
