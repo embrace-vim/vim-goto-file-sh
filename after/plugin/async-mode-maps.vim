@@ -57,7 +57,7 @@ let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 
 " USAGE: Enable (opt-in) insert mode `gf` with global:
 "   let g:vim_goto_file_add_insert_mode_map = 1
-function! s:setup_bindings_insert_mode_gf()
+function! s:setup_bindings_insert_mode_gf() abort
   if !exists("g:vim_goto_file_add_insert_mode_map")
       \ || !g:vim_goto_file_add_insert_mode_map
 
@@ -84,7 +84,7 @@ endfunction
 "
 " USAGE: Enable (opt-in) visual mode `gf` with global:
 "   let g:vim_goto_file_add_visual_mode_map = 1
-function! s:setup_bindings_visual_mode_gf()
+function! s:setup_bindings_visual_mode_gf() abort
   if !exists("g:vim_goto_file_add_visual_mode_map")
       \ || !g:vim_goto_file_add_visual_mode_map
 
@@ -98,7 +98,7 @@ endfunction
 " ***
 
 " Use `gF` command, or `gf` is user wants that instead.
-function! s:setup_gf_command()
+function! s:setup_gf_command() abort
   let s:gf_command = "gF"
 
   if exists("g:vim_goto_file_use_simple_gf")
@@ -110,7 +110,7 @@ endfunction
 
 " ***
 
-function! s:setup_bindings_all_modes_gf()
+function! s:setup_bindings_all_modes_gf() abort
   call s:setup_gf_command()
   call s:setup_bindings_insert_mode_gf()
   call s:setup_bindings_visual_mode_gf()
