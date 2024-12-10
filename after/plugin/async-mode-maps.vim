@@ -69,8 +69,8 @@ function! s:setup_bindings_insert_mode_gf()
   let g:vim_async_mapper_timeout = 100
 
   try
-    " Wire the `gf` key sequence to the `gf` command.
-    call g:embrace#amapper#register_insert_mode_map("gf", "gf")
+    " Wire the `gf` key sequence to the `gF` (or `gf`) command.
+    call g:embrace#amapper#register_insert_mode_map("gf", s:gf_command)
 	catch /^Vim\%((\a\+)\)\=:E117:/
     " E.g., E117: Unknown function: foo#bar#baz
     " - I.e., embrace-vim/vim-async-mapper is not installed.
@@ -99,7 +99,19 @@ function! s:setup_bindings_visual_mode_gf()
   vnoremap gf y:edit <C-r>"<CR>
 endfunction
 
+" Use `gF` command, or `gf` is user wants that instead.
+function! s:setup_gf_command()
+  let s:gf_command = "gF"
+
+  if exists("g:vim_goto_file_use_simple_gf")
+      \ && g:vim_goto_file_use_simple_gf == 1
+
+    let s:gf_command = "gf"
+  endif
+endfunction
+
 function! s:setup_bindings_all_modes_gf()
+  call s:setup_gf_command()
   call s:setup_bindings_insert_mode_gf()
   call s:setup_bindings_visual_mode_gf()
 endfunction

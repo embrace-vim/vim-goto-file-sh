@@ -134,6 +134,17 @@ like you would with a naïve ``imap gf`` binding).
   " Inhibit insert mode `gf` map
   let g:vim_goto_file_add_insert_mode_map = 0
 
+By default, the insert mode ``gf`` map will call ``gF``, so that
+it honors a line number following the file path.
+
+- If you'd like to use regular ``gf`` instead, use another
+  global variable:
+
+.. code-block:: vim
+
+  " Use `gf` (instead of `gF`)
+  let g:vim_goto_file_use_simple_gf = 1
+
 ``gf`` visual mode map
 ----------------------
 
