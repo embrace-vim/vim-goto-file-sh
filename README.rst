@@ -126,13 +126,14 @@ to open file paths (and it won't interrupt your normal ``g``
 keypresses — i.e., you won't see a pause after typing ``g``
 like you would with a naïve ``imap gf`` binding).
 
-- You can opt out of the insert mode ``gf`` map by uninstalling
-  |vim-async-mapper|_, or by adding the following to your Vim config:
+- You can enable the insert mode ``gf`` map by installing
+  |vim-async-mapper|_, and then add the following to your
+  Vim config:
 
 .. code-block:: vim
 
-  " Inhibit insert mode `gf` map
-  let g:vim_goto_file_add_insert_mode_map = 0
+  " Enable insert mode `gf` map
+  let g:vim_goto_file_add_insert_mode_map = 1
 
 By default, the insert mode ``gf`` map will call ``gF``, so that
 it honors a line number following the file path.
@@ -152,13 +153,13 @@ it honors a line number following the file path.
 that you can select text and then type ``gf`` to open the selected
 path.
 
-- You can opt out of the visual mode ``gf`` map by adding the
+- You can enable the visual mode ``gf`` map by adding the
   following to your Vim config:
 
 .. code-block:: vim
 
-  " Inhibit visual mode `gf` map
-  let g:vim_goto_file_add_visual_mode_map = 0
+  " Enable visual mode `gf` map
+  let g:vim_goto_file_add_visual_mode_map = 1
 
 Reference
 =========

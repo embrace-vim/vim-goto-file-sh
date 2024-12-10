@@ -55,11 +55,11 @@ let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 "   instead of :undo to remove it). In any case, that was some of the
 "   motivation for the fork.
 
-" USAGE: Inhibit insert mode `gf` with global:
-"   let g:vim_goto_file_add_insert_mode_map = 0
+" USAGE: Enable (opt-in) insert mode `gf` with global:
+"   let g:vim_goto_file_add_insert_mode_map = 1
 function! s:setup_bindings_insert_mode_gf()
-  if exists("g:vim_goto_file_add_insert_mode_map")
-      \ && !g:vim_goto_file_add_insert_mode_map
+  if !exists("g:vim_goto_file_add_insert_mode_map")
+      \ || !g:vim_goto_file_add_insert_mode_map
 
     return
   endif
@@ -73,24 +73,18 @@ function! s:setup_bindings_insert_mode_gf()
     call g:embrace#amapper#register_insert_mode_map("gf", s:gf_command)
 	catch /^Vim\%((\a\+)\)\=:E117:/
     " E.g., E117: Unknown function: foo#bar#baz
-    " - I.e., embrace-vim/vim-async-mapper is not installed.
-
-    " Silently fail unless user's config explicitly wants us.
-    if exists("g:vim_goto_file_add_insert_mode_map")
-        \ && g:vim_goto_file_add_insert_mode_map
-      echom "ALERT: Please install embrace-vim/vim-async-mapper to enable `gf` insert mode map:"
-      echom "  https://github.com/embrace-vim/vim-async-mapper#જ⁀➴"
-    endif
+    echom "ALERT: Please install embrace-vim/vim-async-mapper to enable `gf` insert mode map:"
+    echom "  https://github.com/embrace-vim/vim-async-mapper#જ⁀➴"
   endtry
 endfunction
 
 " Also wire visual mode `gf`.
 "
-" USAGE: Inhibit visual mode `gf` with global:
-"   let g:vim_goto_file_add_visual_mode_map = 0
+" USAGE: Enable (opt-in) visual mode `gf` with global:
+"   let g:vim_goto_file_add_visual_mode_map = 1
 function! s:setup_bindings_visual_mode_gf()
-  if exists("g:vim_goto_file_add_visual_mode_map")
-      \ && !g:vim_goto_file_add_visual_mode_map
+  if !exists("g:vim_goto_file_add_visual_mode_map")
+      \ || !g:vim_goto_file_add_visual_mode_map
 
     return
   endif
