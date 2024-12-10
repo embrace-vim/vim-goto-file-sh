@@ -63,10 +63,6 @@ function! s:setup_bindings_insert_mode_gf() abort
     return
   endif
 
-  " The plugin alerts and hints at fixes if Python 3 not available,
-  " which is required to set a timeout under 2,000 msecs.
-  let g:vim_async_mapper_timeout = 100
-
   try
     " Wire the `gf` key sequence to the `gF` (or `gf`) command.
     call g:embrace#amapper#register_insert_mode_map("gf", s:gf_command)
@@ -106,6 +102,20 @@ endfunction
 
 " ***
 
+" Set a reasonable async mapper timeout.
+function! s:init_mapper_timeout() abort
+  if exists("g:vim_async_mapper_timeout")
+
+    return
+  endif
+
+  " The plugin alerts and hints at fixes if Python 3 not available,
+  " which is required to set a timeout under 2,000 msecs.
+  let g:vim_async_mapper_timeout = 100
+endfunction
+
+" ***
+
 " Use `gF` command, or `gf` is user wants that instead.
 function! s:setup_gf_command() abort
   let s:gf_command = "gF"
@@ -126,6 +136,7 @@ function! s:setup_bindings_all_modes_gf() abort
     return
   endif
 
+  call s:init_mapper_timeout()
   call s:setup_gf_command()
   call s:setup_bindings_insert_mode_gf()
   call s:setup_bindings_visual_mode_gf()
