@@ -116,9 +116,9 @@ to try to resolves matches. So it matters how you started Vim.
 |gf| insert mode map
 
 If you'd like a nondisruptive |gf| binding to work from insert
-mode, you can install `vim-async-mapper`:
+mode, you can install `vim-async-map`:
 
-  https://github.com/embrace-vim/vim-async-mapper#જ⁀➴
+  https://github.com/embrace-vim/vim-async-map#જ⁀➴
 
 If that plugin is installed, you can use |gf| from insert mode
 to open file paths (and it won't interrupt your normal `g`
@@ -126,7 +126,7 @@ keypresses — i.e., you won't see a pause after typing `g`
 like you would with a naïve `imap gf` binding).
 
 - You can enable the insert mode |gf| map by installing
-  `vim-async-mapper`, and then add the following to your
+  `vim-async-map`, and then add the following to your
   Vim config: >
 
   " Enable insert mode `gf` map

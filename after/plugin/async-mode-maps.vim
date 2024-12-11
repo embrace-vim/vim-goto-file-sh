@@ -65,11 +65,11 @@ function! s:setup_bindings_insert_mode_gf() abort
 
   try
     " Wire the `gf` key sequence to the `gF` (or `gf`) command.
-    call g:embrace#amapper#register_insert_mode_map("gf", s:gf_command)
+    call g:embrace#async_map#register_insert_mode_map("gf", s:gf_command)
 	catch /^Vim\%((\a\+)\)\=:E117:/
     " E.g., E117: Unknown function: foo#bar#baz
-    echom "ALERT: Please install embrace-vim/vim-async-mapper to enable `gf` insert mode map:"
-    echom "  https://github.com/embrace-vim/vim-async-mapper#જ⁀➴"
+    echom "ALERT: Please install embrace-vim/vim-async-map to enable `gf` insert mode map:"
+    echom "  https://github.com/embrace-vim/vim-async-map#જ⁀➴"
   endtry
 endfunction
 
