@@ -178,11 +178,20 @@ Related projects
 .. |vim-npr| replace:: ``https://github.com/tomarrell/vim-npr#🐿``
 .. _vim-npr: https://github.com/tomarrell/vim-npr
 
+.. |vim-apathy| replace:: ``https://github.com/tpope/vim-apathy``
+.. _vim-apathy: https://github.com/tpope/vim-apathy
+
 See also these similar project(s):
 
 - *Sensible 'gf' for Node Path Relative JS module resolution per project 🐿*
 
   |vim-npr|_
+
+- *Apathy sets the five path searching options — 'path', 'suffixesadd',
+  'include', 'includeexpr', and 'define' — for file types I don't care
+  about enough to bother with creating a proper plugin.*
+
+  |vim-apathy|_
 
 Installation
 ============
