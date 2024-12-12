@@ -1,6 +1,6 @@
 *vim-goto-file-sh.txt*	|includeexpr| for |gf|.	2024 Dec 04
 
-VIM GOTO FILE — SH: Enable 'gf' to resolve shell variable paths.~
+VIM GOTO FILE — SH 🚕 Enable 'gf' to resolve shell variable paths~
 
 VIM GOTO FILE — SH			*vim-goto-file-sh*
 
