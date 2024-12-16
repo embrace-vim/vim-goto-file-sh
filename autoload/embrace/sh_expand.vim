@@ -87,7 +87,7 @@
 " CXREF: These functions are called by this project's plugin:
 " ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/plugin/includeexpr-for-gf.vim
 
-function! embrace#sh_expand#expand_shell_parameter(var) abort
+function! s:ExpandShellParameter(var) abort
   try
     let val = eval('$' .. a:var)
   catch
@@ -132,7 +132,7 @@ function! g:embrace#sh_expand#ExpandShellParameters(string) abort
   let res = substitute(
     \ a:string,
     \ '\v\$\{(.{})\}',
-    \ '\=embrace#sh_expand#expand_shell_parameter(submatch(1))', 'g'
+    \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
   \ )
 
   return res
