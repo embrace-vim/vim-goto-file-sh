@@ -65,7 +65,7 @@ function! s:CreateMaps_InsertMode_gf() abort
 
   try
     " Wire the `gf` key sequence to the `gF` (or `gf`) command.
-    call g:embrace#async_map#register_insert_mode_map("gf", s:gf_command)
+    call g:embrace#async_map#RegisterInsertModeMap("gf", s:gf_command)
   catch /^Vim\%((\a\+)\)\=:E117:/
     " E.g., E117: Unknown function: foo#bar#baz
     echom "ALERT: Please install embrace-vim/vim-async-map to enable `gf` insert mode map:"
@@ -104,14 +104,14 @@ endfunction
 
 " Set a reasonable async mapper timeout.
 function! s:ChooseTimeoutAsyncMap() abort
-  if exists("g:vim_async_mapper_timeout")
+  if exists("g:vim_async_map_timeout")
 
     return
   endif
 
   " The plugin alerts and hints at fixes if Python 3 not available,
   " which is required to set a timeout under 2,000 msecs.
-  let g:vim_async_mapper_timeout = 100
+  let g:vim_async_map_timeout = 100
 endfunction
 
 " ***
