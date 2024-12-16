@@ -17,20 +17,6 @@
 
 " -------------------------------------------------------------------
 
-" USAGE: After editing this plugin, you can reload it on the fly with
-"        https://github.com/landonb/vim-source-reloader#↩️
-" - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
-"
-" silent! unlet g:loaded_vim_goto_file_sh_autoload_sh_expand
-
-if exists("g:loaded_vim_goto_file_sh_autoload_sh_expand") || &cp
-  finish
-endif
-
-let g:loaded_vim_goto_file_sh_autoload_sh_expand = 1
-
-" -------------------------------------------------------------------
-
 " UTEST: Here are some variable variations these functions support:
 "
 " - Should work on paths that `gf` supports by default, e.g.:
