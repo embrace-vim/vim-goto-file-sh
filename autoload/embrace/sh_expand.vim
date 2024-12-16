@@ -36,6 +36,7 @@
 "
 " - Should resolve nested variable values, e.g.:
 "
+"     " Note `gf` won't work from here unless 'vim' part of g:vim_goto_file_filetypes
 "     ${EMBRACE_VIM:-${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start}/vim-goto-file-sh/README.rst
 "
 " - Should work when multiple variables are on the same line, e.g.:
