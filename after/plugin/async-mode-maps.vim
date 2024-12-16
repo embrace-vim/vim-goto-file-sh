@@ -103,7 +103,7 @@ endfunction
 " ***
 
 " Set a reasonable async mapper timeout.
-function! s:ChooseTimeoutAsyncMap() abort
+function! s:InitAsyncMapTimeout() abort
   if exists("g:vim_async_map_timeout")
 
     return
@@ -129,14 +129,14 @@ endfunction
 
 " ***
 
-function! s:setup_bindings_all_modes_gf() abort
+function! s:CreateMaps_gf() abort
   if !s:is_flag_enabled("g:vim_goto_file_add_insert_mode_map")
     \ && !s:is_flag_enabled("g:vim_goto_file_add_visual_mode_map")
 
     return
   endif
 
-  call s:ChooseTimeoutAsyncMap()
+  call s:InitAsyncMapTimeout()
   call s:ChooseCommand_gf()
   call s:CreateMaps_InsertMode_gf()
   call s:CreateMaps_VisualMode_gf()
@@ -144,5 +144,5 @@ endfunction
 
 " -------------------------------------------------------------------
 
-call s:setup_bindings_all_modes_gf()
+call s:CreateMaps_gf()
 
