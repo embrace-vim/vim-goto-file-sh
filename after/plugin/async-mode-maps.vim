@@ -57,7 +57,7 @@ let g:loaded_vim_goto_file_after_plugin_async_mode_maps = 1
 
 " USAGE: Enable (opt-in) insert mode `gf` with global:
 "   let g:vim_goto_file_add_insert_mode_map = 1
-function! s:setup_bindings_insert_mode_gf() abort
+function! s:CreateMaps_InsertMode_gf() abort
   if !s:is_flag_enabled("g:vim_goto_file_add_insert_mode_map")
 
     return
@@ -79,7 +79,7 @@ endfunction
 "
 " USAGE: Enable (opt-in) visual mode `gf` with global:
 "   let g:vim_goto_file_add_visual_mode_map = 1
-function! s:setup_bindings_visual_mode_gf() abort
+function! s:CreateMaps_VisualMode_gf() abort
   if !s:is_flag_enabled("g:vim_goto_file_add_visual_mode_map")
 
     return
@@ -103,7 +103,7 @@ endfunction
 " ***
 
 " Set a reasonable async mapper timeout.
-function! s:init_mapper_timeout() abort
+function! s:ChooseTimeoutAsyncMap() abort
   if exists("g:vim_async_mapper_timeout")
 
     return
@@ -117,7 +117,7 @@ endfunction
 " ***
 
 " Use `gF` command, or `gf` is user wants that instead.
-function! s:setup_gf_command() abort
+function! s:ChooseCommand_gf() abort
   let s:gf_command = "gF"
 
   if exists("g:vim_goto_file_use_simple_gf")
@@ -136,10 +136,10 @@ function! s:setup_bindings_all_modes_gf() abort
     return
   endif
 
-  call s:init_mapper_timeout()
-  call s:setup_gf_command()
-  call s:setup_bindings_insert_mode_gf()
-  call s:setup_bindings_visual_mode_gf()
+  call s:ChooseTimeoutAsyncMap()
+  call s:ChooseCommand_gf()
+  call s:CreateMaps_InsertMode_gf()
+  call s:CreateMaps_VisualMode_gf()
 endfunction
 
 " -------------------------------------------------------------------
