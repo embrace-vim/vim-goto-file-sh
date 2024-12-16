@@ -117,7 +117,7 @@ function! embrace#sh_expand#expand_shell_parameter(var) abort
       let val = eval('$' .. environ)
       if empty(val)
         " Recurse.
-        let val = embrace#sh_expand#str_expand_shell_parameters(alt_val)
+        let val = g:embrace#sh_expand#ExpandShellParameters(alt_val)
       endif
     endif
   endif
@@ -128,7 +128,7 @@ endfunction
 " Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
 " includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
 " if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
-function! embrace#sh_expand#str_expand_shell_parameters(string) abort
+function! g:embrace#sh_expand#ExpandShellParameters(string) abort
   let res = substitute(
     \ a:string,
     \ '\v\$\{(.{})\}',

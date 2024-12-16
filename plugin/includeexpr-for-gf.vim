@@ -49,9 +49,9 @@ if !exists("g:vim_goto_file_filetypes")
 endif
 
 if empty(g:vim_goto_file_filetypes)
-  set includeexpr=embrace#sh_expand#str_expand_shell_parameters(v:fname)
+  set includeexpr=g:embrace#sh_expand#ExpandShellParameters(v:fname)
 else
   exec "autocmd FileType " .. g:vim_goto_file_filetypes ..
-    \ " setlocal includeexpr=embrace#sh_expand#str_expand_shell_parameters(v:fname)"
+    \ " setlocal includeexpr=g:embrace#sh_expand#ExpandShellParameters(v:fname)"
 endif
 
