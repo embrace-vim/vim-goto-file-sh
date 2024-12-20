@@ -17,10 +17,12 @@
 
 " -------------------------------------------------------------------
 
-" USAGE: Unlet var (or nix finish) & press <F9> to reload this plugin.
-" USING: https://github.com/landonb/vim-source-reloader#↩️
-"
-"  silent! unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
+" GUARD: Press <F9> to reload this plugin (or :source it).
+" - Via: https://github.com/landonb/vim-source-reloader#↩️
+
+if expand("%:p") ==# expand("<sfile>:p")
+  unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
+endif
 
 if exists("g:loaded_vim_goto_file_plugin_includeexpr_for_gf") || &cp
 
