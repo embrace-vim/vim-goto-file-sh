@@ -18,7 +18,7 @@
 " -------------------------------------------------------------------
 
 " GUARD: Press <F9> to reload this plugin (or :source it).
-" - Via: https://github.com/landonb/vim-source-reloader#↩️
+" - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
 
 if expand("%:p") ==# expand("<sfile>:p")
   unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
