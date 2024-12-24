@@ -20,11 +20,11 @@
 " GUARD: Press <F9> to reload this plugin (or :source it).
 " - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
 
-if expand("%:p") ==# expand("<sfile>:p")
-  unlet g:loaded_vim_goto_file_plugin_includeexpr_for_gf
+if expand('%:p') ==# expand('<sfile>:p')
+  unlet! g:loaded_vim_goto_file_plugin_includeexpr_for_gf
 endif
 
-if exists("g:loaded_vim_goto_file_plugin_includeexpr_for_gf") || &cp
+if exists('g:loaded_vim_goto_file_plugin_includeexpr_for_gf') || &cp
 
   finish
 endif
