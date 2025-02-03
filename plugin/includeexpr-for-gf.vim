@@ -8,7 +8,7 @@
 
 " ABOUT:
 "
-"   ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+"   ~/.kit/nvim/embrace-vim/start/vim-goto-file-sh/README.rst
 "
 " REFER:
 "
