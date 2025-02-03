@@ -21,23 +21,24 @@
 "
 " - Should work on paths that `gf` supports by default, e.g.:
 "
-"     ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+"     ~/.config/nvim/init.lua
 "
-"     $HOME/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+"     $HOME/.config/nvim/init.lua
 "
-"     ${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+"     ${HOME}/.config/nvim/init.lua
 "
-"     "${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst"
+"     "${HOME}/.config/nvim/init.lua"
 "
 " - Should use the alternative variable value when an environment variable
 "   is undefined, e.g.:
 "
-"     ${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start/vim-goto-file-sh/README.rst
+"     ${XDG_CONFIG:-${HOME}/.config}/nvim/init.lua
 "
 " - Should resolve nested variable values, e.g.:
 "
-"     " Note `gf` won't work from here unless 'vim' part of g:vim_goto_file_filetypes
-"     ${EMBRACE_VIM:-${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start}/vim-goto-file-sh/README.rst
+"     " Note `gf` won't work from this file unless 'vim' filetype
+"     " is registered in g:vim_goto_file_filetypes
+"     ${NVIM_CONFIG:-${XDG_CONFIG:-${HOME}/.config}/nvim}/init.lua
 "
 " - Should work when multiple variables are on the same line, e.g.:
 "
