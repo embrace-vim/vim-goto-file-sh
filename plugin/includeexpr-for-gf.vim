@@ -45,9 +45,15 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 "   installed and wired to JS/TS files; or maybe you use vim-fugitive,
 "   which sets includeexpr for the 'fugitive' file type), then you'll
 "   want to use a filetype restriction here.
+"
+" REFER: Default &includeexpr is empty for most filetypes, set for others.
+" - For Lua, default &includeexpr changes require()-style dots to slashes:
+"     includeexpr = "tr(v:fname,'.','/')"
+"   (Though also requires that cwd be set appropriately.)
+"   - SAVVY: Use |gd| to open a require() module, got |gf|.
 
 if !exists("g:vim_goto_file_filetypes")
-  let g:vim_goto_file_filetypes = 'bash,sh,markdown,rst,txt'
+  let g:vim_goto_file_filetypes = 'bash,sh,markdown,rst,txt,vim,lua'
 endif
 
 if empty(g:vim_goto_file_filetypes)
