@@ -53,7 +53,7 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 "   - SAVVY: Use |gd| to open a require() module, got |gf|.
 
 if !exists("g:vim_goto_file_filetypes")
-  let g:vim_goto_file_filetypes = 'bash,sh,markdown,rst,txt,vim,lua'
+  let g:vim_goto_file_filetypes = 'bash,sh,ruby,markdown,rst,txt,vim,lua'
 endif
 
 if empty(g:vim_goto_file_filetypes)
