@@ -63,8 +63,8 @@ Next, ensure that |isfname| is configured properly.
 
 - To work on alternative shell variable values, e.g., if you want
   |gf| to resolve `${foo:-bar}` to `bar` if `$foo` is not defined in the
-  environment, then you'll need to ensure that Vim includes colons
-  when sussing filenames.
+  environment, then you'll need to ensure that (Neo)Vim includes
+  colons when sussing filenames.
 
   - E.g., here's the author's |isfname| value (where 39 is the
     single quote character, and 48-57 are the characters '0'-'9'): >
