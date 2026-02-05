@@ -59,11 +59,13 @@ Next, ensure that ``isfname`` is configured properly.
   colons when sussing filenames.
 
   - E.g., here's the author's ``isfname`` value (where 39 is the
-    single quote character, and 48-57 are the characters '0'-'9'):
+    single quote character, 48-57 are the characters '0'-'9',
+    and "@-@" is the literal at sign "@" (because the leading
+    "@" matches all ``isalpha()`` characters)):
 
 .. code-block::
 
-  set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39
+  set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39,@-@
 
 Configuration
 =============
