@@ -131,12 +131,12 @@ endfunction
 " includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
 " if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
 function! g:embrace#sh_expand#ExpandShellParameters(string) abort
-  let res = substitute(
+  let l:res = substitute(
     \ a:string,
     \ '\v\$\{(.{})\}',
     \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
   \ )
 
-  return res
+  return l:res
 endfunction
 
