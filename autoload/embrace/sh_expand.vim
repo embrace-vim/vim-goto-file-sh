@@ -137,6 +137,32 @@ function! g:embrace#sh_expand#ExpandShellParameters(string) abort
     \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
   \ )
 
+  if ! filereadable(l:res) && IsRelativePath(l:res)
+    " REFER: The ";" at end of finddir path searches upward.
+    let l:root_dir = finddir('.git/..', expand('%:p:h').';')
+    let l:abs_path = fnamemodify(l:root_dir . "/" . l:res, ':p')
+    if ! filereadable(l:abs_path) && ! isdirectory(l:abs_path)
+      let l:root_dir = finddir('.git/../..', expand('%:p:h').';')
+      let l:abs_path = fnamemodify(l:root_dir . "/" . l:res, ':p')
+      if filereadable(l:abs_path) || isdirectory(l:abs_path)
+        let l:res = l:abs_path
+      endif
+    else
+      let l:res = l:abs_path
+    endif
+  endif
+
   return l:res
+endfunction
+
+" THANX: https://www.google.com/search?q=vimscript+check+if+string+is+relative+path
+function! s:IsRelativePath(path) abort
+  if has('win32') || has('win64')
+    " Windows absolute paths start with a drive letter (C:\) or a UNC network share (\\)
+    return a:path !~? '^[a-z]:[/\\]' && a:path !~ '^\\\\[^\\]'
+  else
+    " Unix/Linux/macOS absolute paths always start with /
+    return a:path !~ '^/' && a:path !~ '^\~'
+  endif
 endfunction
 
