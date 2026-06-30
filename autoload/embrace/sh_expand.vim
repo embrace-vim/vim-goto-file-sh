@@ -135,19 +135,8 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
 
   let l:res = s:ExpandVariable(l:fname)
 
-  if ! filereadable(l:res) && IsRelativePath(l:res)
-    " REFER: The ";" at end of finddir path searches upward.
-    let l:root_dir = finddir('.git/..', expand('%:p:h').';')
-    let l:abs_path = fnamemodify(l:root_dir . "/" . l:res, ':p')
-    if ! filereadable(l:abs_path) && ! isdirectory(l:abs_path)
-      let l:root_dir = finddir('.git/../..', expand('%:p:h').';')
-      let l:abs_path = fnamemodify(l:root_dir . "/" . l:res, ':p')
-      if filereadable(l:abs_path) || isdirectory(l:abs_path)
-        let l:res = l:abs_path
-      endif
-    else
-      let l:res = l:abs_path
-    endif
+  if ! filereadable(l:res) && s:IsRelativePath(l:res)
+    let l:res = s:RelativeToProjectRootOrParent(l:fname)
   endif
 
   return l:res
@@ -175,3 +164,20 @@ function! s:IsRelativePath(path) abort
   endif
 endfunction
 
+function! s:RelativeToProjectRootOrParent(fname) abort
+  let l:fname = ""
+  " REFER: The ";" at end of finddir path searches upward.
+  let l:root_dir = finddir('.git/..', expand('%:p:h').';')
+  let l:abs_path = fnamemodify(l:root_dir . "/" . a:fname, ':p')
+  if ! filereadable(l:abs_path) && ! isdirectory(l:abs_path)
+    let l:root_dir = finddir('.git/../..', expand('%:p:h').';')
+    let l:abs_path = fnamemodify(l:root_dir . "/" . a:fname, ':p')
+    if filereadable(l:abs_path) || isdirectory(l:abs_path)
+      let l:fname = l:abs_path
+    endif
+  else
+    let l:fname = l:abs_path
+  endif
+
+  return l:fname
+endfunction
