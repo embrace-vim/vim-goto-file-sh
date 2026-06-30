@@ -131,7 +131,7 @@ endfunction
 
 function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   let l:fname = a:fname
-  if ! l:fname
+  if empty(l:fname)
     let l:fname = v:fname
   endif
 
@@ -145,7 +145,7 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
     if ! s:FileReadableOrIsDirectory(l:res)
       let l:res = s:FallbackBuiltinIncludeexpr(l:expanded)
     endif
-    if l:res == ""
+    if empty(l:res)
       " This is the value Vim reports to the user, e.g.:
       "   E447: Can't find file "foo" in path
       let l:res = l:expanded
