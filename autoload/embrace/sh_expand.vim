@@ -121,8 +121,8 @@ function! s:ExpandShellParameter(var) abort
       let val = eval('$' .. environ)
       if empty(val)
         " Recurse.
-        let l:recursing = 1
-        let val = g:embrace#sh_expand#ExpandShellParameters(alt_val, l:recursing)
+        let recursing = 1
+        let val = s:ExpandVariable(alt_val, recursing)
       endif
     endif
   endif
@@ -133,15 +133,16 @@ endfunction
 " -------------------------------------------------------------------
 
 " SAVVY: This is the |includeexpr| entry point; also a recursive callback.
-function! g:embrace#sh_expand#ExpandShellParameters(fname = '', recursing = 0) abort
+function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   let l:fname = a:fname
   if empty(l:fname)
     let l:fname = v:fname
   endif
 
-  let l:expanded = s:ExpandVariable(l:fname, a:recursing)
+  let l:recursing = 0
+  let l:expanded = s:ExpandVariable(l:fname, l:recursing)
 
-  if ! a:recursing && ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
+  if ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
     let l:res = s:RelativeToProjectRootOrParent(l:expanded)
     if ! s:FileReadableOrIsDirectory(l:res)
       let l:res = s:RelativeToUserProjectRootOrChild(l:expanded)
