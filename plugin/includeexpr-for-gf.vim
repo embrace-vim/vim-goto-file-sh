@@ -52,6 +52,9 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 "   (Though also requires that cwd be set appropriately.)
 "   - SAVVY: Use |gd| to open a require() module, got |gf|.
 
+" USAGE: Use the magic value -1 to disable the plugin via config, e.g.:
+"   let g:vim_goto_file_filetypes = -1
+
 if !exists("g:vim_goto_file_filetypes")
   let g:vim_goto_file_filetypes = 'bash,sh,ruby,markdown,rst,txt,vim,lua'
 endif
@@ -59,7 +62,7 @@ endif
 " SAVVY: Caller will get path under cursor from v:fname.
 if empty(g:vim_goto_file_filetypes)
   set includeexpr=g:embrace#sh_expand#ExpandShellParameters()
-else
+elseif g:vim_goto_file_filetypes != -1
   exec "autocmd FileType " .. g:vim_goto_file_filetypes ..
     \ " setlocal includeexpr=g:embrace#sh_expand#ExpandShellParameters()"
 endif
