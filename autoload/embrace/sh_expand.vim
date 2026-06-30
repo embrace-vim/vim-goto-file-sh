@@ -138,6 +138,9 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   if ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
     let l:res = s:RelativeToProjectRootOrParent(l:expanded)
     if ! s:FileReadableOrIsDirectory(l:res)
+      let l:res = s:RelativeToUserProjectRootOrChild(l:expanded)
+    endif
+    if ! s:FileReadableOrIsDirectory(l:res)
       let l:res = s:FallbackBuiltinIncludeexpr(l:expanded)
     endif
     if l:res == ""
@@ -194,6 +197,25 @@ function! s:RelativeToProjectRootOrParent(fname) abort
   endif
 
   return l:fname
+endfunction
+
+" Test if relative to user-supplied project directory,
+" or if relative to a subdir of the project directory.
+" - USAGE: Set g:vim_goto_file_root in your config to your
+"   main, root base dir. wherein you keep all your projects.
+function! s:RelativeToUserProjectRootOrChild(fname) abort
+  let l:userdir = expand(g:vim_goto_file_root)
+  let l:res = fnamemodify(l:userdir . "/" . a:fname, ':p')
+  if ! s:FileReadableOrIsDirectory(l:res)
+    let l:matches = readdir(l:userdir, {
+      \ entry -> isdirectory(fnamemodify(l:userdir . "/" . entry, ':p'))
+      \   ? s:FileReadableOrIsDirectory(fnamemodify(l:userdir . "/" . entry . "/" . a:fname, ':p'))
+      \   : 0})
+    if len(l:matches) > 0
+      let l:res = fnamemodify(l:userdir . "/" . l:matches[0] . "/" . a:fname, ':p')
+    endif
+  endif
+  return l:res
 endfunction
 
 " ***
