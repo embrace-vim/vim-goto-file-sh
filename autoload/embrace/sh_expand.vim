@@ -127,20 +127,13 @@ function! s:ExpandShellParameter(var) abort
   return val
 endfunction
 
-" Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
-" includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
-" if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
-function! g:embrace#sh_expand#ExpandShellParameters(fname) abort
+function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   let l:fname = a:fname
   if ! l:fname
     let l:fname = v:fname
   endif
 
-  let l:res = substitute(
-    \ l:fname,
-    \ '\v\$\{(.{})\}',
-    \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
-  \ )
+  let l:res = s:ExpandVariable(l:fname)
 
   if ! filereadable(l:res) && IsRelativePath(l:res)
     " REFER: The ";" at end of finddir path searches upward.
@@ -158,6 +151,17 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname) abort
   endif
 
   return l:res
+endfunction
+
+" Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
+" includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
+" if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
+function! s:ExpandVariable(fname) abort
+  return substitute(
+    \ a:fname,
+    \ '\v\$\{(.{})\}',
+    \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
+    \ )
 endfunction
 
 " THANX: https://www.google.com/search?q=vimscript+check+if+string+is+relative+path
