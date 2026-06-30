@@ -127,6 +127,8 @@ function! s:ExpandShellParameter(var) abort
   return val
 endfunction
 
+" -------------------------------------------------------------------
+
 function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   let l:fname = a:fname
   if ! l:fname
@@ -155,6 +157,8 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   return l:res
 endfunction
 
+" -------------------------------------------------------------------
+
 " Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
 " includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
 " if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
@@ -165,6 +169,8 @@ function! s:ExpandVariable(fname) abort
     \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
     \ )
 endfunction
+
+" -------------------------------------------------------------------
 
 function! s:FileReadableOrIsDirectory(fname) abort
   return filereadable(a:fname) || isdirectory(a:fname)
@@ -180,6 +186,8 @@ function! s:IsRelativePath(path) abort
     return a:path !~ '^/' && a:path !~ '^\~'
   endif
 endfunction
+
+" ***
 
 function! s:RelativeToProjectRootOrParent(fname) abort
   let l:fname = ""
@@ -198,6 +206,8 @@ function! s:RelativeToProjectRootOrParent(fname) abort
 
   return l:fname
 endfunction
+
+" ***
 
 " Test if relative to user-supplied project directory,
 " or if relative to a subdir of the project directory.
@@ -349,3 +359,5 @@ endfunction
 function! s:IncludeexprZig() abort
   return substitute(v:fname, "^([^.])$", "\1.zig", "")
 endfunction
+
+" -------------------------------------------------------------------
