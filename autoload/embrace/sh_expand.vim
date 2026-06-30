@@ -111,7 +111,9 @@ function! s:ExpandShellParameter(var) abort
     let parts = split(a:var, ':\?[-+=?]\zs', keepempty)
 
     if len(parts) >= 2
-      " Strip the separator from the environ name.
+      " Strip the separator suffix from the environ name.
+      " - Note the caller does not send the prefix, e.g.,
+      "   don't need to sub-out: '^\${\?'
       let environ = substitute(parts[0], ':\?[-+=?]$', '', '')
       " Rebuild the alternative value.
       let alt_val = join(parts[1:], '')
@@ -119,7 +121,8 @@ function! s:ExpandShellParameter(var) abort
       let val = eval('$' .. environ)
       if empty(val)
         " Recurse.
-        let val = g:embrace#sh_expand#ExpandShellParameters(alt_val)
+        let l:recursing = 1
+        let val = g:embrace#sh_expand#ExpandShellParameters(alt_val, l:recursing)
       endif
     endif
   endif
@@ -129,16 +132,16 @@ endfunction
 
 " -------------------------------------------------------------------
 
-" SAVVY: This is the |includeexpr| entry point.
-function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
+" SAVVY: This is the |includeexpr| entry point; also a recursive callback.
+function! g:embrace#sh_expand#ExpandShellParameters(fname = '', recursing = 0) abort
   let l:fname = a:fname
   if empty(l:fname)
     let l:fname = v:fname
   endif
 
-  let l:expanded = s:ExpandVariable(l:fname)
+  let l:expanded = s:ExpandVariable(l:fname, a:recursing)
 
-  if ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
+  if ! a:recursing && ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
     let l:res = s:RelativeToProjectRootOrParent(l:expanded)
     if ! s:FileReadableOrIsDirectory(l:res)
       let l:res = s:RelativeToUserProjectRootOrChild(l:expanded)
@@ -160,15 +163,118 @@ endfunction
 
 " -------------------------------------------------------------------
 
-" Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
-" includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
-" if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
-function! s:ExpandVariable(fname) abort
-  return substitute(
-    \ a:fname,
-    \ '\v\$\{(.{})\}',
-    \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
-    \ )
+" The first time this func. is called, we need to be aware that there
+" may be multiple *separate* long-form variables, e.g.:
+"
+"   ${XDG_DATA_HOME:-${HOME}/.local/share}/${NVIM_APPNAME:-nvim}/site/spell/en.utf-8.add
+"
+" - In this case, find the first matching "${", and then walk
+"   character-by-character to extract a *balanced* variable.
+"   - See ExtractBalancedSubstring, below.
+"   - Using the example path above, the function will extract
+"     and loop over two separate strings, first:
+"       {XDG_DATA_HOME:-${HOME}/.local/share}
+"     and second:
+"       {NVIM_APPNAME:-nvim}
+"
+" - This func. is also called recursively, in which case we know
+"   there are not separate long-form variables, and we can run a
+"   simple substitute instead.
+"   - The s:ExtractBalancedBraceExpanse-and-while-loop approach
+"     would also work, but it's unnecessary.
+"   - Note the greedy match '.{}' rather than non-greedy match '.{-}'
+"     which ensures that ${...} includes submatches, e.g.,
+"     '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$' if non-greedy,
+"     but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
+"   - REFER: \v  starts "very magic", such that:
+"            \$  literal $
+"            \{  literal {
+"         (.{})  match group '()', any character '.', & as many as poss. (aka '*') '{}'
+"            \}  literal }
+function! s:ExpandVariable(fname, recursing) abort
+  if a:recursing
+    " Extracts longest substring from inside outer ${}, e.g., extracts this:
+    "   XDG_DATA_HOME:-${HOME}/.local/share
+    " from this:
+    "   ${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/spell/en.utf-8.add
+    " - Bware: But doesn't work if contains 2+, i.e., ${separate} ${vars},
+    "   because extracts, e.g., "separate} ${vars", not "separate".
+    return substitute(
+      \ a:fname,
+      \ '\v\$\{(.{})\}',
+      \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
+      \ )
+  else
+    let l:resolved = a:fname
+    " Returns, e.g., "{substring}"
+    let l:substr = s:ExtractBalancedBraceExpanse(l:resolved)
+    while l:substr != ""
+      let l:innards = substitute(l:substr, '^{\(.*\)}$', '\1', '')
+      let l:expanded = s:ExpandShellParameter(l:innards)
+      let l:resolved = substitute(l:resolved, "$" . l:substr, l:expanded, '')
+      let l:substr = s:ExtractBalancedBraceExpanse(l:resolved)
+    endwhile
+
+    return l:resolved
+  endif
+endfunction
+
+" SAVVY:
+"   \\v                     Very magic (changes "\" usage)
+"   \(^|[^\\\\])            Start of line, or any char. except "\"
+"   \\$                     Literal dolladollabill
+"   \\zs                    Start of match (as opposed to
+"                             using neg. look-behind \@<!)
+"   \\{                     Opening (literal) brace
+"   [a-zA-Z_][a-zA-Z0-9_]*  Shell variable name legal chars.
+function! s:ExtractBalancedBraceExpanse(resolved) abort
+  let pattern = "\\v\(^|[^\\\\])\\$\\zs\\{[a-zA-Z_][a-zA-Z0-9_]*"
+
+  return s:ExtractBalancedSubstring(a:resolved, l:pattern, "{", "}")
+endfunction
+
+" ***
+
+" SILLY: The LLM knew I meant "balanced"; I just wasn't thinking of the right word.
+" - I added init_match to check for "$" before "{" (and not "\" before "$"). /@lb
+" - THANX: https://www.google.com/search?q=vim+script+extract+substring+between+left+and+right+brackets+including+all+nested+brackets%2C+but+final+substring+should+have+equal+left+and+right+brackets
+"   - GAIO: Example Usage:
+"       echom ExtractBalancedSubstring("foo [a [b] c] d [e] f", "[", "]")
+"       Returns: '[a [b] c]'
+function! s:ExtractBalancedSubstring(str, init_match, left_char, right_char)
+  let start_idx = match(a:str, a:init_match)
+  if start_idx == -1
+    return ""
+  endif
+
+  let balance = 0
+  let end_idx = -1
+  let i = start_idx
+
+  " Loop through characters to find the boundary where left and right brackets are equal
+  while i < strlen(a:str)
+    let char = a:str[i]
+    if char == a:left_char
+      let balance += 1
+    elseif char == a:right_char
+      let balance -= 1
+    endif
+
+    if balance == 0
+      let end_idx = i
+
+      break
+    endif
+
+    let i += 1
+  endwhile
+
+  if end_idx != -1
+    let spart = strpart(a:str, start_idx, (end_idx - start_idx + 1))
+    return spart
+  endif
+
+  return ""
 endfunction
 
 " -------------------------------------------------------------------
