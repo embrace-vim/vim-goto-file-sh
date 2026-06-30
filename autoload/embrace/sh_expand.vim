@@ -173,7 +173,7 @@ endfunction
 " -------------------------------------------------------------------
 
 function! s:FileReadableOrIsDirectory(fname) abort
-  return filereadable(a:fname) || isdirectory(a:fname)
+  return !empty(a:fname) && (filereadable(a:fname) || isdirectory(a:fname))
 endfunction
 
 " THANX: https://www.google.com/search?q=vimscript+check+if+string+is+relative+path
