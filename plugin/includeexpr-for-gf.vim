@@ -56,10 +56,11 @@ if !exists("g:vim_goto_file_filetypes")
   let g:vim_goto_file_filetypes = 'bash,sh,ruby,markdown,rst,txt,vim,lua'
 endif
 
+" SAVVY: Caller will get path under cursor from v:fname.
 if empty(g:vim_goto_file_filetypes)
-  set includeexpr=g:embrace#sh_expand#ExpandShellParameters(v:fname)
+  set includeexpr=g:embrace#sh_expand#ExpandShellParameters()
 else
   exec "autocmd FileType " .. g:vim_goto_file_filetypes ..
-    \ " setlocal includeexpr=g:embrace#sh_expand#ExpandShellParameters(v:fname)"
+    \ " setlocal includeexpr=g:embrace#sh_expand#ExpandShellParameters()"
 endif
 

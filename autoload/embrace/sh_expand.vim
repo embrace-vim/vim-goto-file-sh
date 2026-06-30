@@ -130,9 +130,14 @@ endfunction
 " Use greedy match '.{}' rather than non-greedy match '.{-}' so that ${...}
 " includes submatches, e.g., '${foo:-${bar:-${baz:-bat}}}' is simply 'foo:-$'
 " if non-greedy, but when greedy, it's 'foo:-${bar:-${baz:-bat}}'.
-function! g:embrace#sh_expand#ExpandShellParameters(string) abort
+function! g:embrace#sh_expand#ExpandShellParameters(fname) abort
+  let l:fname = a:fname
+  if ! l:fname
+    let l:fname = v:fname
+  endif
+
   let l:res = substitute(
-    \ a:string,
+    \ l:fname,
     \ '\v\$\{(.{})\}',
     \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
   \ )
