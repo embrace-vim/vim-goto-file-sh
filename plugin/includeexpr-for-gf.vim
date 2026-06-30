@@ -36,30 +36,22 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 " USAGE: Decide what file types you want this plugin to work on.
 " - You can set this variable blank to work on all file types:
 "     let g:vim_goto_file_filetypes = ''
-"
-" REFER: The `:help includeexpr` doc examples use `setlocal`, e.g.:
-"   setlocal includeexpr=s:MyIncludeExpr()
-" But if this is the only `includeexpr` you use, you can enable it
-" globally without concern.
-" - But if you use another `includeexpr` (e.g., you've got vim-npr
-"   installed and wired to JS/TS files; or maybe you use vim-fugitive,
-"   which sets includeexpr for the 'fugitive' file type), then you'll
-"   want to use a filetype restriction here.
-"
-" REFER: Default &includeexpr is empty for most filetypes, set for others.
-" - For Lua, default &includeexpr changes require()-style dots to slashes:
-"     includeexpr = "tr(v:fname,'.','/')"
-"   (Though also requires that cwd be set appropriately.)
-"   - SAVVY: Use |gd| to open a require() module, got |gf|.
-
-" USAGE: Use the magic value -1 to disable the plugin via config, e.g.:
-"   let g:vim_goto_file_filetypes = -1
+" - BWARE: But you'll probably want to check if the filetype defines
+"   its own includeexpr, so you can recreate it in the callback.
+"   - See more helpful comments in the callback function file:
+"     ./vim-goto-file-sh/autoload/embrace/sh_expand.vim
+" - USAGE: To disable this plugin altogether, via config, set
+"   the global var. to the magic disablement value, -1, e.g.:
+"     let g:vim_goto_file_filetypes = -1
 
 if !exists("g:vim_goto_file_filetypes")
   let g:vim_goto_file_filetypes = 'bash,sh,ruby,markdown,rst,txt,vim,lua'
 endif
 
-" SAVVY: Caller will get path under cursor from v:fname.
+" SAVVY: Before invoking the callback, |gf| and |gF| set v:fname to the
+" string under the cursor, identifying it based on filename &iskeyword.
+" - But they won't call the callback unless necessary, (e.g., for an
+"   absolute path that exists, gf/gF won't call the callback).
 if empty(g:vim_goto_file_filetypes)
   set includeexpr=g:embrace#sh_expand#ExpandShellParameters()
 elseif g:vim_goto_file_filetypes != -1
