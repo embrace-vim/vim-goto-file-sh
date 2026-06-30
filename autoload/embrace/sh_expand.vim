@@ -135,7 +135,7 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
 
   let l:res = s:ExpandVariable(l:fname)
 
-  if ! filereadable(l:res) && s:IsRelativePath(l:res)
+  if ! s:FileReadableOrIsDirectory(l:res) && s:IsRelativePath(l:res)
     let l:res = s:RelativeToProjectRootOrParent(l:fname)
   endif
 
@@ -151,6 +151,10 @@ function! s:ExpandVariable(fname) abort
     \ '\v\$\{(.{})\}',
     \ '\=<SID>ExpandShellParameter(submatch(1))', 'g'
     \ )
+endfunction
+
+function! s:FileReadableOrIsDirectory(fname) abort
+  return filereadable(a:fname) || isdirectory(a:fname)
 endfunction
 
 " THANX: https://www.google.com/search?q=vimscript+check+if+string+is+relative+path
