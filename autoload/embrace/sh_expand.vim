@@ -129,6 +129,7 @@ endfunction
 
 " -------------------------------------------------------------------
 
+" SAVVY: This is the |includeexpr| entry point.
 function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
   let l:fname = a:fname
   if empty(l:fname)
