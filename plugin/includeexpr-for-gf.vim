@@ -45,7 +45,10 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 "     let g:vim_goto_file_filetypes = -1
 
 if !exists("g:vim_goto_file_filetypes")
-  let g:vim_goto_file_filetypes = 'bash,sh,ruby,markdown,rst,txt,vim,lua'
+  " ONGNG: Most filetypes don't define includeexpr, but you should check
+  " before adding to this list. See comments in autoload/ file.
+  let g:vim_goto_file_filetypes =
+    \ 'bash,css,gitcommit,go,haskell,javascript,jsonc,kotlin,lua,markdown,python,rst,ruby,rust,sass,sh,text,vim,zig'
 endif
 
 " SAVVY: Before invoking the callback, |gf| and |gF| set v:fname to the

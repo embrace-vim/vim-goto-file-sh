@@ -133,10 +133,20 @@ function! g:embrace#sh_expand#ExpandShellParameters(fname = '') abort
     let l:fname = v:fname
   endif
 
-  let l:res = s:ExpandVariable(l:fname)
+  let l:expanded = s:ExpandVariable(l:fname)
 
-  if ! s:FileReadableOrIsDirectory(l:res) && s:IsRelativePath(l:res)
-    let l:res = s:RelativeToProjectRootOrParent(l:fname)
+  if ! s:FileReadableOrIsDirectory(l:expanded) && s:IsRelativePath(l:expanded)
+    let l:res = s:RelativeToProjectRootOrParent(l:expanded)
+    if ! s:FileReadableOrIsDirectory(l:res)
+      let l:res = s:FallbackBuiltinIncludeexpr(l:expanded)
+    endif
+    if l:res == ""
+      " This is the value Vim reports to the user, e.g.:
+      "   E447: Can't find file "foo" in path
+      let l:res = l:expanded
+    endif
+  else
+    let l:res = l:expanded
   endif
 
   return l:res
@@ -184,4 +194,136 @@ function! s:RelativeToProjectRootOrParent(fname) abort
   endif
 
   return l:fname
+endfunction
+
+" ***
+
+" REFER: Default &includeexpr is empty for lots of filetypes, set for others.
+"
+" There are a few ways to suss which filetypes use includeexpr:
+" - The most obvious: Run `echom &includeexpr` from the file
+"   you're curious about, double-checking `echom &filetype`.
+"   - This approach include built-in `setlocal includeexpr=`, from
+"     filetype plugins, as well as those from any user plugins.
+" - To check for built-in (it's coming from inside the house)
+"   wirings, excluding user config, run so-called vanilla vim, e.g.:
+"     nvim --noplugin
+"   - You can also run `rg includeexpr=` on vim sources, and you
+"     will see all the matches (AFAIK; there are 46, in v0.12.3).
+"     - This is how we sourced the code below.
+"
+" - SAVVY: As mentioned above, includeexpr is unset for most |filetype|s, including:
+"     sh, bash, ruby, markdown, rst, text, jsonc, vim, go, javascript, css
+"   - USYNC: This list and the callbacks below are all declared in the plugin:
+"     g:vim_goto_file_filetypes = 'bash,css,gitcommit,go,haskell,javascript,...'
+"
+" - ONGNG: We'll add more filetype support below as necessary (either
+"   adding to the unset list previous, or adding a callback below; and
+"   adding to the plugin's default g:vim_goto_file_filetypes value).
+
+" USYNC: You can determine which filetypes 
+function! s:FallbackBuiltinIncludeexpr(fname) abort
+  if &filetype == 'gitcommit'
+    return s:IncludeexprGitcommit()
+  elseif &filetype == 'haskell'
+    return s:IncludeexprHaskell()
+  elseif &filetype == 'kotlin'
+    return s:IncludeexprKotlin()
+  elseif &filetype == 'lua'
+    return s:IncludeexprLua()
+  elseif &filetype == 'perl'
+    return s:IncludeexprPerl()
+  elseif &filetype == 'python'
+    return s:IncludeexprPython()
+  elseif &filetype == 'rust'
+    return s:IncludeexprRust()
+  elseif &filetype == 'sass'
+    return s:IncludeexprSass()
+  elseif &filetype == 'scala'
+    return s:IncludeexprScala()
+  elseif &filetype == 'zig'
+    return s:IncludeexprZig()
+  endif
+  return ""
+endfunction
+
+" For some filetypes, their includeexpr is a scoped callback,
+" so if we wanted to support these, it'd be more work, i.e.,
+" obvi., this wouldn't work:
+"
+"   " runtime/ftplugin/astro.vim @ 35
+"   function! s:Includeexpr(fname) abort
+"     " ISOFF: Cannot call s:func from a different s:.
+"     return s:AstroInclude(a:fname)
+"   endfunction
+
+" COPYD: ./runtime/ftplugin/gitcommit.vim @ 17 [v0.12.3]
+function! s:IncludeexprGitcommit() abort
+  return substitute(v:fname,'^[bi]/','','')
+endfunction
+
+" Author doesn't use Haskell but here outta ruhspek.
+" COPYD: ./runtime/ftplugin/haskell.vim @ 26 [v0.12.3] 
+function! s:IncludeexprHaskell() abort
+  return findfile(tr(v:fname,'.','/'),'.;')
+endfunction
+
+" COPYD: ./runtime/ftplugin/kotlin.vim @ 20 [v0.12.3]
+function! s:IncludeexprKotlin() abort
+  return substitute(v:fname,'\\.','/','g')
+endfunction
+
+" COPYD: ./runtime/ftplugin/lua.lua @ 4 [v0.12.3]
+" - CALSO: ./runtime/ftplugin/lua.vim @ 39 [v0.12.3]
+"   setlocal includeexpr=s:LuaInclude(v:fname)
+"   - Aside: For Lua, default &includeexpr changes require()-style dots to slashes:
+"       function s:LuaInclude(fname) abort
+"         ...
+"         includeexpr = "tr(v:fname,'.','/')"
+"     (Though also requires that cwd be set appropriately.)
+"     - SAVVY: Use |gd| to open a require() module, not |gf|.
+function! s:IncludeexprLua() abort
+  return v:lua.require'vim._ftplugin.lua'.includeexpr(v:fname)
+endfunction
+
+" The Luau language, aka Roblox, derived from Lua 5.1.
+"
+"   " COPYD: ./runtime/ftplugin/luau.vim @ 20 [v0.12.3]
+"   function! s:IncludeexprLuau() abort
+"     " ISOFF: Cannot call s:func from a different s:.
+"     return s:LuauInclude(v:fname)
+"   endfunction
+
+" COPYD: ./runtime/ftplugin/perl.vim @ 33 [v0.12.3]
+function! s:IncludeexprPerl() abort
+  return substitute(substitute(substitute(substitute(v:fname,'+','',''),'::','/','g'),'->\*','',''),'$','.pm','')
+endfunction
+
+" COPYD: runtime/ftplugin/python.vim @ 33 [v0.12.3]
+function! s:IncludeexprPython() abort
+  return substitute(substitute(substitute(
+    \v:fname,
+    \b:grandparent_match,b:grandparent_sub,''),
+    \b:parent_match,b:parent_sub,''),
+    \b:child_match,b:child_sub,'g')
+endfunction
+
+" COPYD: ./runtime/ftplugin/rust.vim @ 59 [v0.12.3]
+function! s:IncludeexprRust() abort
+  return rust#IncludeExpr(v:fname)
+endfunction
+
+" COPYD: ./runtime/ftplugin/sass.vim @ 17 [v0.12.3]
+function! s:IncludeexprSass() abort
+  return SassIncludeExpr(v:fname)
+endfunction
+
+" COPYD: ./runtime/ftplugin/scala.vim @ 35 [v0.12.3]
+function! s:IncludeexprScala() abort
+  return substitute(v:fname,'\\.','/','g')
+endfunction
+
+" COPYD: ./runtime/ftplugin/zig.vim @ 40 [v0.12.3]
+function! s:IncludeexprZig() abort
+  return substitute(v:fname, "^([^.])$", "\1.zig", "")
 endfunction
