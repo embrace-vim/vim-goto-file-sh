@@ -44,7 +44,7 @@ it honors a line number following the file path.
 ``gf`` visual mode map
 ----------------------
 
-``vim-goto-file-sh`` will also create a visual mode ``gf`` map, so
+``vim-goto-file-improved`` will also create a visual mode ``gf`` map, so
 that you can select text and then type ``gf`` to open the selected
 path.
 

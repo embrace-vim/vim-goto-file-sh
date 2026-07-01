@@ -1,5 +1,5 @@
 @@@@@@@@@@@@@@@@@@@@@@@@@
-vim-goto-file-improved 🛴
+vim-goto-file-improved 🚕
 @@@@@@@@@@@@@@@@@@@@@@@@@
 
 #######################################################################
@@ -34,7 +34,7 @@ The enhanced ``gf``/``gF`` lets you:
 
   - E.g., with this file open in Neovim, you can ``gf`` the following path::
 
-      ./vim-goto-file-sh/autoload/embrace/sh_expand.vim
+      ./vim-goto-file-improved/autoload/embrace/sh_expand.vim
 
   - And you can also use so-called "aunt or uncle" paths [*my term,
     sorry*], relative to the project's parent directory.
@@ -44,7 +44,7 @@ The enhanced ``gf``/``gF`` lets you:
         ./vim-blinky-search//README.rst
 
       provided that ``vim-blinky-search/`` exists alongside
-      ``vim-goto-file-sh/``.
+      ``vim-goto-file-improved/``.
 
 - 3.) Use path string relative to arbitrary *user-designated*
   directory, or a child thereof.
@@ -172,7 +172,7 @@ E.g., here's how you might install and configure the plugin
 from Lua using |lazy.nvim|_::
 
   {
-    "embrace-vim/vim-goto-file-sh",
+    "embrace-vim/vim-goto-file-improved",
 
     event = "VeryLazy",
 

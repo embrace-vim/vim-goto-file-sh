@@ -1,21 +1,21 @@
-*vim-goto-file-sh.txt*	|includeexpr| for |gf|.	2026 Jul 01
+*vim-goto-file-improved.txt*	|includeexpr| for |gf|.	2026 Jul 01
 
 VIM GOTO FILE — IMPROVED 🛴 Enable 'gf' to resolve shell variable paths ~
 
-VIM GOTO FILE — SH			*vim-goto-file-sh*
+VIM GOTO FILE — SH			*vim-goto-file-improved*
 
-1. About This Plugin			|vim-goto-file-sh-aspects|
-2. Further Details			|vim-goto-file-sh-details|
-3. Default Behavior			|vim-goto-file-sh-builtin|
-4. Configuration Options		|vim-goto-file-sh-options|
-5. Configuring |isfname|		|vim-goto-file-sh-isfname|
-6. Caveats				|vim-goto-file-sh-caveats|
-7. Insert and Visual mode maps          |vim-goto-file-sh-asyncgf|
-8. Reference				|vim-goto-file-sh-vimhelp|
-9. Related projects			|vim-goto-file-sh-related|
+1. About This Plugin			|vim-goto-file-improved-aspects|
+2. Further Details			|vim-goto-file-improved-details|
+3. Default Behavior			|vim-goto-file-improved-builtin|
+4. Configuration Options		|vim-goto-file-improved-options|
+5. Configuring |isfname|		|vim-goto-file-improved-isfname|
+6. Caveats				|vim-goto-file-improved-caveats|
+7. Insert and Visual mode maps          |vim-goto-file-improved-asyncgf|
+8. Reference				|vim-goto-file-improved-vimhelp|
+9. Related projects			|vim-goto-file-improved-related|
 
 ==============================================================================
-1. About This Plugin			*vim-goto-file-sh-aspects*
+1. About This Plugin			*vim-goto-file-improved-aspects*
 
 This plugin adds _multiple_ improvements to the Neovim
 (or Vim) |gf| and |gF| commands, so you can:
@@ -37,10 +37,10 @@ and your editor would open the file at >
 
   ~/.local/share/nvim/site/spell/en.utf-8.add
 <
-Project page: https://github.com/embrace-vim/vim-goto-file-sh
+Project page: https://github.com/embrace-vim/vim-goto-file-improved
 
 ==============================================================================
-2. Further Details			*vim-goto-file-sh-details*
+2. Further Details			*vim-goto-file-improved-details*
 
 The enhanced |gf| / |gF| lets you:
 
@@ -54,7 +54,7 @@ The enhanced |gf| / |gF| lets you:
 
   - E.g., with this file open in Neovim, you can |gf| the following path: >
 
-      ./vim-goto-file-sh/autoload/embrace/sh_expand.vim
+      ./vim-goto-file-improved/autoload/embrace/sh_expand.vim
 <
   - You can also use so-called "aunt or uncle" paths, [_author's
     term, sorry_] relative to the project's parent directory.
@@ -64,7 +64,7 @@ The enhanced |gf| / |gF| lets you:
         ./vim-blinky-search/README.rst
 <
       provided that `vim-blinky-search/` exists alongside
-      `vim-goto-file-sh/`.
+      `vim-goto-file-improved/`.
 
 - 3.) Use path string relative to arbitrary _user-designated_
       directory, or a child thereof.
@@ -95,11 +95,11 @@ The enhanced |gf| / |gF| lets you:
       let g:vim_goto_file_root = "~/.kit"
 <
 ==============================================================================
-3. Default Behavior			*vim-goto-file-sh-builtin*
+3. Default Behavior			*vim-goto-file-improved-builtin*
 
 - The |gf| and |gF| commands are used to open the path represented
   by the word under the cursor (using |isfname| to match the word
-  characters; see below: |vim-goto-file-sh-isfname|).
+  characters; see below: |vim-goto-file-improved-isfname|).
 
   - Per |gf| help: `gf` will *edit the filename at (or after) cursor.
     Mnemonic: "goto file".
@@ -155,13 +155,13 @@ Fallback Behavior
     already by accustomed).
 
 ==============================================================================
-4. Configuration Options		*vim-goto-file-sh-options*
+4. Configuration Options		*vim-goto-file-improved-options*
 
 E.g., here's how you might install and configure the plugin
 from Lua using |lazy.nvim|: >
 
   {
-    "embrace-vim/vim-goto-file-sh",
+    "embrace-vim/vim-goto-file-improved",
 
     event = "VeryLazy",
 
@@ -187,9 +187,9 @@ file types (and it will not alert you if it clobbers an existing
 - Currently, this plugin is activated on these file types, none of
   which define a custom |includeexpr| otherwise: >
 
-    bash, conf, config, css, dosbatch, dosini, gitignore,
-    go, javascript, jsonc, markdown, rst, ruby, sh, sql,
-    text, toml, typescriptreact, vim, yaml
+    bash, conf, config, css, dosbatch, dosini, gitconfig,
+    gitignore, go, javascript, jsonc, markdown, rst, ruby,
+    sh, sql, text, toml, typescriptreact, vim, yaml
 <
 - And this plugin is also activated on these file types, each of which
   has a custom, built-in |includeexpr| behavior that is used as a
@@ -214,9 +214,9 @@ file types (and it will not alert you if it clobbers an existing
   Here's the default value: >
 
     vim.g.vim_goto_file_filetypes = ""
-      .. "bash,conf,config,css,dosbatch,dosini,gitignore,go,javascript,"
-      .. "jsonc,markdown,rst,ruby,sh,sql,text,toml,typescriptreact,vim,"
-      .. "yaml,yaml.ansible,"
+      .. "bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,"
+      .. "javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,"
+      .. "typescriptreact,vim,yaml,yaml.ansible,"
       .. "gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig"
 <
 - If you'd like to set a global |includeexpr| for _all_
@@ -230,7 +230,7 @@ file types (and it will not alert you if it clobbers an existing
   vim.g.vim_goto_file_filetypes = -1
 <
 ==============================================================================
-5. Configuring |isfname|		*vim-goto-file-sh-isfname*
+5. Configuring |isfname|		*vim-goto-file-improved-isfname*
 
 To ensure variable expansion works, you'll want to ensure that
 |isfname| is configured properly.
@@ -248,7 +248,7 @@ To ensure variable expansion works, you'll want to ensure that
   set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39,@-@
 <
 ==============================================================================
-6. Caveats				*vim-goto-file-sh-caveats*
+6. Caveats				*vim-goto-file-improved-caveats*
 
 This plugin calls `eval('$<var>')` on the environment variables
 to try to resolves matches. So it matters how you started Neovim.
@@ -262,7 +262,7 @@ to try to resolves matches. So it matters how you started Neovim.
   same environment variables that your shell normally has.
 
 ==============================================================================
-7. Insert and Visual mode maps          *vim-goto-file-sh-asyncgf*
+7. Insert and Visual mode maps          *vim-goto-file-improved-asyncgf*
 
 ------------------
 |gf| insert mode map
@@ -296,7 +296,7 @@ it honors a line number following the file path.
 ------------------
 |gf| visual mode map
 
-`vim-goto-file-sh` will also create a visual mode |gf| map, so
+`vim-goto-file-improved` will also create a visual mode |gf| map, so
 that you can select text and then type |gf| to open the selected
 path.
 
@@ -307,7 +307,7 @@ path.
   let g:vim_goto_file_add_visual_mode_map = 1
 <
 ==============================================================================
-8. Reference				*vim-goto-file-sh-vimhelp*
+8. Reference				*vim-goto-file-improved-vimhelp*
 
 See Neovim :|help| for more details:
 
@@ -320,7 +320,7 @@ See Neovim :|help| for more details:
   |isfname|
 
 ==============================================================================
-9. Related projects			*vim-goto-file-sh-related*
+9. Related projects			*vim-goto-file-improved-related*
 
 See also these similar projects:
 

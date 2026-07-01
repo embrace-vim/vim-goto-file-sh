@@ -1,6 +1,6 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
 " Author: Landon Bouma <https://tallybark.com/>
-" Project: https://github.com/embrace-vim/vim-goto-file-sh#🚕
+" Project: https://github.com/embrace-vim/vim-goto-file-improved#🚕
 " Summary: Shell syntax-aware `includeexpr` for `gf`
 " License: GPLv3
 
@@ -8,7 +8,7 @@
 
 " ABOUT:
 "
-"   ~/.kit/nvim/embrace-vim/start/vim-goto-file-sh/README.rst
+"   ~/.kit/nvim/embrace-vim/start/vim-goto-file-improved/README.rst
 "
 " REFER:
 "
@@ -39,7 +39,7 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 " - BWARE: But you'll probably want to check if the filetype defines
 "   its own includeexpr, so you can recreate it in the callback.
 "   - See more helpful comments in the callback function file:
-"     ./vim-goto-file-sh/autoload/embrace/sh_expand.vim
+"     ./vim-goto-file-improved/autoload/embrace/sh_expand.vim
 " - USAGE: To disable this plugin altogether, via config, set
 "   the global var. to the magic disablement value, -1, e.g.:
 "     let g:vim_goto_file_filetypes = -1

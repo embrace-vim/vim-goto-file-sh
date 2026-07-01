@@ -1,6 +1,6 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
 " Author: Landon Bouma <https://tallybark.com/>
-" Project: https://github.com/embrace-vim/vim-goto-file-sh#🚕
+" Project: https://github.com/embrace-vim/vim-goto-file-improved#🚕
 " Summary: Shell syntax-aware `includeexpr` implementation for `gf`
 " License: GPLv3
 
@@ -57,7 +57,7 @@
 " - If isfname includes a single quote, than `gf` won't work if the path
 "   is single-quoted, e.g., this won't work:
 "
-"     '${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst'
+"     '${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-improved/README.rst'
 "
 "   - But `gf` will work if a pathname has an actual single quote in
 "     it, e.g.:
@@ -87,7 +87,7 @@
 " -------------------------------------------------------------------
 
 " CXREF: These functions are called by this project's plugin:
-" ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/plugin/includeexpr-for-gf.vim
+" ~/.vim/pack/embrace-vim/start/vim-goto-file-improved/plugin/includeexpr-for-gf.vim
 
 function! s:ExpandShellParameter(var) abort
   try
