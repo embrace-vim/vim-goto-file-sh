@@ -1,118 +1,268 @@
-*vim-goto-file-sh.txt*	|includeexpr| for |gf|.	2024 Dec 04
+*vim-goto-file-sh.txt*	|includeexpr| for |gf|.	2026 Jul 01
 
-VIM GOTO FILE — SH 🚕 Enable 'gf' to resolve shell variable paths ~
+VIM GOTO FILE — IMPROVED 🛴 Enable 'gf' to resolve shell variable paths ~
 
 VIM GOTO FILE — SH			*vim-goto-file-sh*
 
-1. About This Plugin			|vim-goto-file-sh-about|
+1. About This Plugin			|vim-goto-file-sh-aspects|
 2. Further Details			|vim-goto-file-sh-details|
-3. Setup				|vim-goto-file-sh-setup|
-4. Configuration			|vim-goto-file-sh-configuration|
-5. Caveats				|vim-goto-file-sh-caveats|
-6. Insert and Visual mode maps          |vim-goto-file-sh-modes|
-7. Reference				|vim-goto-file-sh-reference|
-8. Related projects			|vim-goto-file-sh-related|
+3. Default Behavior			|vim-goto-file-sh-builtin|
+4. Configuration Options		|vim-goto-file-sh-options|
+5. Configuring |isfname|		|vim-goto-file-sh-isfname|
+6. Caveats				|vim-goto-file-sh-caveats|
+7. Insert and Visual mode maps          |vim-goto-file-sh-asyncgf|
+8. Reference				|vim-goto-file-sh-vimhelp|
+9. Related projects			|vim-goto-file-sh-related|
 
 ==============================================================================
-1. About This Plugin			*vim-goto-file-sh-about*
+1. About This Plugin			*vim-goto-file-sh-aspects*
 
-This plugin enables the Vim |gf| command to resolve shell variable
-paths, including those with alternative values.
+This plugin adds _multiple_ improvements to the Neovim
+(or Vim) |gf| and |gF| commands, so you can:
+
+- 1.) Use _alternative_ (aka default) variable values.
+
+- 2.) Use path strings _relative_ to a file's *project root*,
+      or its parent.
+
+- 3.) Use path strings _relative_ to an arbitrary _user-designated_
+      directory, or a child thereof.
 
 For example, you could position the cursor over the following path
 and press |gf|: >
 
-  ${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start/vim-goto-file-sh/README.rst
+  ${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/spell/en.utf-8.add
 <
-and Vim would open the file at >
+and your editor would open the file at >
 
-  ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
+  ~/.local/share/nvim/site/spell/en.utf-8.add
 <
 Project page: https://github.com/embrace-vim/vim-goto-file-sh
 
 ==============================================================================
 2. Further Details			*vim-goto-file-sh-details*
 
-The Vim |gf| command ("Edit the file whose name is under or after the cursor")
-will resolve tilde and the HOME environ variable, but not other variables.
+The enhanced |gf| / |gF| lets you:
 
-- E.g., |gf| works on these paths: >
+- 1.) Use an _alternative_ (aka default) variable value.
 
-  ~/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst
-    
-  "$HOME/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst"
+  - E.g., the following path resolves to `$HOME/Documents/some/file`: >
 
-  "${HOME}/.vim/pack/embrace-vim/start/vim-goto-file-sh/README.rst"
+      ${MY_BESPOKE_VARIABLE:-${HOME}/Documents}/some/file
 <
-- But Vim's built-in |gf| won't work on these paths: >
+- 2.) Use path string _relative_ to project root, or its parent.
 
-  "${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start/vim-goto-file-sh/README.rst"
+  - E.g., with this file open in Neovim, you can |gf| the following path: >
 
-  "${EMBRACE_VIM:-${VIM_PACK:-${HOME}/.vim/pack}/embrace-vim/start}/vim-goto-file-sh/README.rst"
+      ./vim-goto-file-sh/autoload/embrace/sh_expand.vim
 <
-Fortunately, Vim provides the |includeexpr| hook for when |gf| comes
+  - You can also use so-called "aunt or uncle" paths, [_author's
+    term, sorry_] relative to the project's parent directory.
+
+    - E.g., you can also |gf| the following path: >
+
+        ./vim-blinky-search/README.rst
+<
+      provided that `vim-blinky-search/` exists alongside
+      `vim-goto-file-sh/`.
+
+- 3.) Use path string relative to arbitrary _user-designated_
+      directory, or a child thereof.
+
+  - E.g., if you stashed all your projects under a directory
+    named `~/.kit`, then you could |gF| the following path: >
+
+      neovim/src/nvim/file_search.c @ 1759
+<
+    provided that you added the following to your Neovim config: >
+
+      vim.g.vim_goto_file_root = "~/.kit"
+<
+    And that _either_ the top-level path exists, e.g.: >
+
+      ~/.kit/neovim/
+<
+    Or it can be found in any child directory (i.e., a single
+    level down), e.g.: >
+
+      ~/.kit/nvim/neovim/
+<
+    would be acceptable.
+
+  - Note this plugin also supports Vim, and you'd only need to
+    set the global variable slightly differently, e.g.,: >
+
+      let g:vim_goto_file_root = "~/.kit"
+<
+==============================================================================
+3. Default Behavior			*vim-goto-file-sh-builtin*
+
+- The |gf| and |gF| commands are used to open the path represented
+  by the word under the cursor (using |isfname| to match the word
+  characters; see below: |vim-goto-file-sh-isfname|).
+
+  - Per |gf| help: `gf` will *edit the filename at (or after) cursor.
+    Mnemonic: "goto file".
+
+- But the default behavior generally only works on _full_ paths,
+  and it has limited ability to expand shell variables.
+
+  - For instance, the built-in function would work on this path: >
+
+    ${HOME}/.local/share/nvim/site/spell/en.utf-8.add
+<
+  - But it would not work on this path: >
+
+    ${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/spell/en.utf-8.add
+<
+  - Specifically, the built-in |gf| command will resolve tilde
+    (`~`) and it will work on short-form environment variables.
+    But it does not work on long-form variables with default
+    values.
+
+- For reference, here's a sampling of paths that built-in |gf| handles: >
+
+    ~/.local/share/nvim/lazy/lazy.nvim/README.md
+
+    $HOME/.local/share/nvim/lazy/lazy.nvim/README.md
+
+    ${HOME}/.local/share/nvim/lazy/lazy.nvim/README.md
+
+    /home/$LOGNAME/.gitignore
+<
+- And here's a sampling of some paths on which built-in |gf| won't work: >
+
+    ${XDG_DATA_HOME:-${HOME}/.local/share}/nvim/site/spell/en.utf-8.add
+
+    ${NVIM_APPNAME_FULL:-${XDG_DATA_HOME:-${HOME}/.local/share}/nvim}/site/spell/en.utf-8.add
+
+     ~/.local/share/${NVIM_APPNAME:-nvim}/site/spell/en.utf-8.add
+<
+Fortunately, Neovim provides the |includeexpr| hook for when |gf| comes
 up empty — so we don't need to rewrite the |gf| function, we can just
 add an |includeexpr| function.
 
+Fallback Behavior
+-----------------
+
+- Note that _some_ |filetype| types set a custom |includeexpr|.
+
+  - This is often so you can use |gf| on import package names.
+
+  - This plugin will fallback to the default behavior if the
+    path is not otherwise identified (so this plugin should
+    not change any of the default behavior to which you may
+    already by accustomed).
+
 ==============================================================================
-3. Setup				*vim-goto-file-sh-setup*
+4. Configuration Options		*vim-goto-file-sh-options*
 
-First, install this plugin (see the project `README.rst`).
+E.g., here's how you might install and configure the plugin
+from Lua using |lazy.nvim|: >
 
-Next, ensure that |isfname| is configured properly.
+  {
+    "embrace-vim/vim-goto-file-sh",
 
-- To work on alternative shell variable values, e.g., if you want
-  |gf| to resolve `${foo:-bar}` to `bar` if `$foo` is not defined in the
-  environment, then you'll need to ensure that (Neo)Vim includes
-  colons when sussing filenames.
+    event = "VeryLazy",
 
-  - E.g., here's the author's |isfname| value (where 39 is the
-    single quote character, 48-57 are the characters '0'-'9',
-    and "@-@" is the literal at sign "@" (because the leading "@"
-    matches all `isalpha()` characters)): >
+    init = function()
+      -- Set to empty string to enable for all filetypes:
+      --
+      --  vim.g.vim_goto_file_filetypes = ""
+    end,
 
-  set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39,@-@
+    config = function()
+      -- Fallback path for relative paths:
+      -- - If not relative to the project root or its parent,
+      --   tests if relative to this path or any sudirectory.
+      --
+      --  vim.g.vim_goto_file_root = "~/"
+    end,
+  },
 <
-==============================================================================
-4. Configuration			*vim-goto-file-sh-configuration*
-
 By default, this plugin will only change |includeexpr| for specific
 file types (and it will not alert you if it clobbers an existing
 |includeexpr|).
 
-- Specifically, this plugin works on Bash and Shell file types,
-  as well as reST, Markdown, and Text.
+- Currently, this plugin is activated on these file types, none of
+  which define a custom |includeexpr| otherwise: >
 
-- You can use a global variable to add or remove file types.
+    bash, conf, config, css, dosbatch, dosini, gitignore,
+    go, javascript, jsonc, markdown, rst, ruby, sh, sql,
+    text, toml, typescriptreact, vim, yaml
+<
+- And this plugin is also activated on these file types, each of which
+  has a custom, built-in |includeexpr| behavior that is used as a
+  fallback if the path is not identified using variable expansion
+  and isn't a relative path, either: >
+
+    gitcommit, haskell, kotlin, lua, perl, python, rust, sass, scala, zig
+<
+- Specifically, this plugin works on: Bash and Shell file types;
+  as well as reST, Markdown, and Text; also Config files, CSS,
+  DOS Batch and INI, Git ignore, Go, JavaScript, JSON (not that
+  JSON supports comments), Ruby, SQL, TOML, TypeScript, Vim, Yaml,
+  Git-commit, Haskell, Kotlin, Lua, Perl, Python, Rust, Sass, Scala,
+  and Zig.
+
+- This plugin will technically work on any |filetype|, but we
+  add each one deliberately, so we can verify if we need to
+  emulate any custom, built-in |includeexpr| behavior.
+
+- You can also use a global variable to add or remove file types.
 
   Here's the default value: >
 
-  let g:vim_goto_file_filetypes = 'bash,sh,markdown,rst,txt'
+    vim.g.vim_goto_file_filetypes = ""
+      .. "bash,conf,config,css,dosbatch,dosini,gitignore,go,javascript,"
+      .. "jsonc,markdown,rst,ruby,sh,sql,text,toml,typescriptreact,vim,"
+      .. "yaml,yaml.ansible,"
+      .. "gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig"
 <
-- If you'd like a global |includeexpr| (e.g., `set includeexpr = ...`
-  and not `set local includeexpr = ...`), you can set this value to
-  the empty string, e.g.: >
+- If you'd like to set a global |includeexpr| for _all_
+  file types, set this value to the empty string, e.g.: >
 
-  let g:vim_goto_file_filetypes = ''
+  vim.g.vim_goto_file_filetypes = ""
+<
+- To disable the plugin (besides uninstalling it), you
+  can set the file-types config variable to "-1": >
+
+  vim.g.vim_goto_file_filetypes = -1
 <
 ==============================================================================
-5. Caveats				*vim-goto-file-sh-caveats*
+5. Configuring |isfname|		*vim-goto-file-sh-isfname*
+
+To ensure variable expansion works, you'll want to ensure that
+|isfname| is configured properly.
+
+- To work on long-form variables with alternative shell values,
+  e.g., if you want |gf| to be able to resolve `${foo:-bar}`, then
+  you need to ensure that the editor includes colons when sussing
+  filenames.
+
+  - E.g., here's the author's |isfname| value (where 39 is the
+    single quote character, 48-57 are the characters '0'-'9',
+    and "@-@" is the literal at sign "@" (because the leading
+    "@" matches all `isalpha()` characters)): >
+
+  set isfname=@,48-57,/,.,:,-,_,+,,,#,$,%,~,=,{,},(,),!,39,@-@
+<
+==============================================================================
+6. Caveats				*vim-goto-file-sh-caveats*
 
 This plugin calls `eval('$<var>')` on the environment variables
-to try to resolves matches. So it matters how you started Vim.
+to try to resolves matches. So it matters how you started Neovim.
 
-- If you've started Vim/gVim from a shell terminal, it'll resolve
-  environments normally defined in your shell.
+- If you've started Neovim (`nvim`) from a shell terminal,
+  it'll resolve environments normally defined in your shell.
 
-- But if you've started Vim/gVim some other way, e.g., if you started
-  MacVim via Spotlight Search, then your Vim environment won't include
-  the same environment variables that your shell normally has.
-
-  - Just FYI, you might want to start Vim/gVim from your shell to
-    get this most utility out of this plugin.
+- But if you've started Neovim some other way, e.g., if you
+  started Neovide via Spotlight Search, or using GNOME Shell
+  Activities, then your Neovim environment won't include the
+  same environment variables that your shell normally has.
 
 ==============================================================================
-6. Insert and Visual mode maps          *vim-goto-file-sh-modes*
+7. Insert and Visual mode maps          *vim-goto-file-sh-asyncgf*
 
 ------------------
 |gf| insert mode map
@@ -157,21 +307,31 @@ path.
   let g:vim_goto_file_add_visual_mode_map = 1
 <
 ==============================================================================
-7. Reference				*vim-goto-file-sh-reference*
+8. Reference				*vim-goto-file-sh-vimhelp*
 
-See Vim online help for details about |gf| and |includeexpr|: >
+See Neovim :|help| for more details:
 
-  :h gf
+  |gf|
 
-  :h includeexpr
-<
+  |gF|
+
+  |includeexpr|
+
+  |isfname|
+
 ==============================================================================
-8. Related projects			*vim-goto-file-sh-related*
+9. Related projects			*vim-goto-file-sh-related*
 
-See also these similar project(s) (use `gW` to open them in your browser):
+See also these similar projects:
 
 - "Sensible 'gf' for Node Path Relative JS module resolution per project 🐿"
 
   https://github.com/tomarrell/vim-npr#🐿
+
+- "Apathy sets the five path searching options — 'path', 'suffixesadd',
+  'include', 'includeexpr', and 'define' — for file types I don't care
+  about enough to bother with creating a proper plugin."
+
+  https://github.com/tpope/vim-apathy
 
  vim:tw=78:ts=8:ft=help:norl:
