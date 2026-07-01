@@ -48,7 +48,8 @@ if !exists("g:vim_goto_file_filetypes")
   " ONGNG: Most filetypes don't define includeexpr, but you should check
   " before adding to this list. See comments in autoload/ file.
   let g:vim_goto_file_filetypes =
-    \ 'bash,css,gitcommit,go,haskell,javascript,jsonc,kotlin,lua,markdown,python,rst,ruby,rust,sass,sh,text,vim,zig'
+    \ 'bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,typescriptreact,vim,yaml,yaml.ansible,'
+    \ . 'gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig'
 endif
 
 " SAVVY: Before invoking the callback, |gf| and |gF| set v:fname to the
