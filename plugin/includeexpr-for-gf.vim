@@ -52,7 +52,7 @@ if !exists("g:vim_goto_file_filetypes")
   "   existing includeexpr; the second for those ft's where the
   "   autoload/ callback recreates/fallbacks the built-in includeexpr.
   let g:vim_goto_file_filetypes =
-    \ 'bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,typescriptreact,vim,yaml,yaml.ansible,'
+    \ 'bash,cls,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,javascript,jsonc,m4,markdown,rst,ruby,sh,sql,tex,text,toml,typescriptreact,vim,xml,yaml,yaml.ansible,'
     \ . 'gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig'
 endif
 
