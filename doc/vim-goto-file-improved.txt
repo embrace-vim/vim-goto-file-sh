@@ -214,8 +214,8 @@ file types (and it will not alert you if it clobbers an existing
   Here's the default value: >
 
     vim.g.vim_goto_file_filetypes = ""
-      .. "bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,"
-      .. "javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,"
+      .. "bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,"
+      .. "go,javascript,jsonc,markdown,rst,ruby,sh,sql,tex,text,toml,"
       .. "typescriptreact,vim,yaml,yaml.ansible,"
       .. "gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig"
 <

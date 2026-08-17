@@ -199,15 +199,17 @@ file types (and it will not alert you if it clobbers an existing
   which define a custom ``includeexpr`` otherwise::
 
     bash, conf, config, css, dosbatch, dosini, gitconfig,
-    gitignore, go, javascript, jsonc, markdown, rst, ruby,
-    sh, sql, text, toml, typescriptreact, vim, yaml, yaml.ansible
+    gitignore, go, javascript, jsonc, markdown, rst, ruby, sh,
+    sql, text, toml, typescriptreact, vim, yaml,
+    yaml.ansible
 
-- And this plugin is also activated on these file types, each of which
-  has a custom, built-in ``includeexpr`` behavior that is used as a
-  fallback if the path is not identified using variable expansion
-  and isn't a relative path::
+- And this plugin is also activated on these file types, each of
+  which has a custom, built-in ``includeexpr`` behavior that is
+  used as a fallback if the path is not identified using variable
+  expansion and isn't a relative path::
 
-    gitcommit, haskell, kotlin, lua, perl, python, rust, sass, scala, zig
+    gitcommit, haskell, kotlin, lua, perl, python, rust, sass,
+    scala, zig
 
 - Specifically, this plugin works on: Bash and Shell file types;
   as well as reST, Markdown, and Text; also Config files, CSS,
@@ -225,8 +227,8 @@ file types (and it will not alert you if it clobbers an existing
   Here's the default value::
 
     vim.g.vim_goto_file_filetypes = ""
-      .. "bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,"
-      .. "javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,"
+      .. "bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,"
+      .. "go,javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,"
       .. "typescriptreact,vim,yaml,yaml.ansible,"
       .. "gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig"
 
