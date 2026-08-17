@@ -46,7 +46,11 @@ let g:loaded_vim_goto_file_plugin_includeexpr_for_gf = 1
 
 if !exists("g:vim_goto_file_filetypes")
   " ONGNG: Most filetypes don't define includeexpr, but you should check
-  " before adding to this list. See comments in autoload/ file.
+  " before adding to this list. See comments in autoload/ file:
+  "   embrace-vim/start/vim-goto-file-improved/autoload/embrace/sh_expand.vim @ 372
+  " - SAVVY: The string is split in two: first for those ft's without
+  "   existing includeexpr; the second for those ft's where the
+  "   autoload/ callback recreates/fallbacks the built-in includeexpr.
   let g:vim_goto_file_filetypes =
     \ 'bash,conf,config,css,dosbatch,dosini,gitconfig,gitignore,go,javascript,jsonc,markdown,rst,ruby,sh,sql,text,toml,typescriptreact,vim,yaml,yaml.ansible,'
     \ . 'gitcommit,haskell,kotlin,lua,perl,python,rust,sass,scala,zig'
